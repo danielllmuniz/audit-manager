@@ -35,3 +35,6 @@ class ReleasesTable(Base):
 
     application = relationship("Application", back_populates="releases")
     approvals = relationship("Approval", back_populates="release")
+
+    def __repr__(self) -> str:
+        return f"<Release(id={self.id}, application_id={self.application_id}, version={self.version}, env={self.env}, status={self.status})>"

@@ -23,3 +23,6 @@ class ApprovalsTable(Base):
     timestamp = Column(DateTime, default=datetime)
 
     release = relationship("Release", back_populates="approvals")
+
+    def __repr__(self) -> str:
+        return f"<Approval(id={self.id}, release_id={self.release_id}, approver_email={self.approver_email}, outcome={self.outcome})>"

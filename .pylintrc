@@ -6,7 +6,9 @@ disable=
       C0116,  # Missing-function-docstring
       W0703,  # Catching too general exception Exception
       C0209,  # Consider-using-f-string
-      E0015   # Unrecognized-option
+      E0015,  # Unrecognized-option
+      C0321,  # multiple-statements
+      C0301,  # line-too-long
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists

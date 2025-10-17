@@ -15,3 +15,6 @@ class ApplicationsTable(Base):
     created_at = Column(DateTime, default=datetime)
 
     releases = relationship("Release", back_populates="application")
+
+    def __repr__(self) -> str:
+        return f"<Application(id={self.id}, name={self.name}, owner_team={self.owner_team})>"
