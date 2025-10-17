@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import (
     Column, Integer, String, DateTime
 )
-from sqlalchemy.orm import relationship
+# from sqlalchemy.orm import relationship
 from src.models.mysql.settings.base import Base
 
 class ApplicationsTable(Base):
@@ -14,7 +14,7 @@ class ApplicationsTable(Base):
     repo_url = Column(String)
     created_at = Column(DateTime, default=datetime)
 
-    releases = relationship("Release", back_populates="application")
+    # releases = relationship("Release", back_populates="application")
 
     def __repr__(self) -> str:
         return f"<Application(id={self.id}, name={self.name}, owner_team={self.owner_team})>"
