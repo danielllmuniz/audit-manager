@@ -1,8 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from .base_url import DB_URL
 class DBConnectionHandler:
     def __init__(self) -> None:
-        self.__connection_string = "mysql+pymysql://user:password@localhost:3306/audit_db"
+        self.__connection_string = DB_URL
         self.__engine = None
         self.session = None
 

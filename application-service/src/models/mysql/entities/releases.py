@@ -1,9 +1,6 @@
 import enum
 from datetime import datetime
-
-from sqlalchemy import (
-    Column, Integer, String, ForeignKey, DateTime, Enum
-)
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum
 from sqlalchemy.orm import relationship
 from src.models.mysql.settings.base import Base
 
@@ -26,15 +23,19 @@ class ReleasesTable(Base):
 
     id = Column(Integer, primary_key=True)
     application_id = Column(Integer, ForeignKey("applications.id"), nullable=False)
-    version = Column(String, nullable=False)
-    env = Column(Enum(EnvironmentEnum), nullable=False)
-    status = Column(Enum(StatusEnum), nullable=False, default=StatusEnum.CREATED)
-    evidence_url = Column(String)
-    created_at = Column(DateTime, default=datetime)
+    version = Column(String(255), nullable=False)
+    env = Column(Enum(EnvironmentEnum, native_enum=False), nullable=False)
+    status = Column(Enum(StatusEnum, native_enum=False), nullable=False, default=StatusEnum.CREATED)
+    evidence_url = Column(String(1024), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
     deployed_at = Column(DateTime, nullable=True)
 
-    application = relationship("Application", back_populates="releases")
-    approvals = relationship("Approval", back_populates="release")
+    # Certifique-se que os nomes abaixo correspondem aos back_populates corretos
+    application = relationship("ApplicationsTable", back_populates="releases")
+    approvals = relationship("ApprovalsTable", back_populates="release")
 
     def __repr__(self) -> str:
-        return f"<Release(id={self.id}, application_id={self.application_id}, version={self.version}, env={self.env}, status={self.status})>"
+        return (
+            f"<Release(id={self.id}, application_id={self.application_id}, "
+            f"version={self.version}, env={self.env}, status={self.status})>"
+        )

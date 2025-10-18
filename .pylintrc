@@ -9,6 +9,9 @@ disable=
       E0015,  # Unrecognized-option
       C0321,  # multiple-statements
       C0301,  # line-too-long
+      W0719,  # broad-exception-raised
+      E1101,  # no-member
+      C0103,  # invalid-name
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
