@@ -1,8 +1,10 @@
 from typing import List
 from src.models.mysql.entities.applications import ApplicationsTable
+from src.models.mysql.interfaces.application_repository import ApplicationRepositoryInterface
 from sqlalchemy.orm.exc import NoResultFound
 
-class ApplicationsRepository:
+
+class ApplicationsRepository(ApplicationRepositoryInterface):
     def __init__(self, db_connection) -> None:
         self.__db_connection = db_connection
 
