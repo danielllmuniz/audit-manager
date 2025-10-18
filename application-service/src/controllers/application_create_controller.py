@@ -8,14 +8,14 @@ class ApplicationCreatorController:
     def __init__(self, application_repository: ApplicationRepositoryInterface) -> None:
         self.__application_repository = application_repository
 
-    def create(self, person_info: Dict) -> Dict:
-        name = person_info["name"]
-        owner_team = person_info["owner_team"]
-        repo_url = person_info["repo_url"]
+    def create(self, application_info: Dict) -> Dict:
+        name = application_info["name"]
+        owner_team = application_info["owner_team"]
+        repo_url = application_info["repo_url"]
 
         self.__validate_name_uniqueness(name)
         # self.__validate_input(name, owner_team)
-        application_created = self.__insert_person_in_db(name, owner_team, repo_url)
+        application_created = self.__insert_application_in_db(name, owner_team, repo_url)
         formated_response = self.__format_response(application_created)
         return formated_response
 
@@ -33,7 +33,7 @@ class ApplicationCreatorController:
     #     if non_valid_caracteres.search(owner_team):
     #         raise HttpBadRequestError("The owner_team can only contain letters from A to Z")
 
-    def __insert_person_in_db(self, name: str, owner_team: str, repo_url: str) -> ApplicationsTable:
+    def __insert_application_in_db(self, name: str, owner_team: str, repo_url: str) -> ApplicationsTable:
         application_created = self.__application_repository.create_application(name, owner_team, repo_url)
         return application_created
 
