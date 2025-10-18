@@ -18,6 +18,7 @@ class ApplicationsRepository(ApplicationRepositoryInterface):
                 )
                 database.session.add(application_data)
                 database.session.commit()
+                database.session.refresh(application_data)
                 return application_data
             except Exception as e:
                 database.session.rollback()
