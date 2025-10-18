@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 from src.models.mysql.entities.releases import ReleasesTable, EnvironmentEnum, StatusEnum
 from src.models.mysql.interfaces.release_repository import ReleaseRepositoryInterface
 from sqlalchemy.orm.exc import NoResultFound
@@ -66,3 +66,27 @@ class ReleasesRepository(ReleaseRepositoryInterface):
                 return releases
             except NoResultFound:
                 return []
+
+    def update_release(self, release_id: int, update_data: Dict[str, Any]) -> ReleasesTable:
+        with self.__db_connection as database:
+            try:
+                release = (
+                    database.session
+                        .query(ReleasesTable)
+                        .filter(ReleasesTable.id == release_id)
+                        .one()
+                )
+
+                # Atualiza dinamicamente os campos fornecidos
+                for key, value in update_data.items():
+                    if hasattr(release, key):
+                        setattr(release, key, value)
+
+                database.session.commit()
+                database.session.refresh(release)
+                return release
+            except NoResultFound:
+                return None
+            except Exception as e:
+                database.session.rollback()
+                raise e

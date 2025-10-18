@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Dict, Any
 from src.models.mysql.entities.releases import ReleasesTable, EnvironmentEnum, StatusEnum
 
 class ReleaseRepositoryInterface(ABC):
@@ -24,4 +24,8 @@ class ReleaseRepositoryInterface(ABC):
 
     @abstractmethod
     def list_releases_by_application(self, application_id: int) -> List[ReleasesTable]:
+        pass
+
+    @abstractmethod
+    def update_release(self, release_id: int, update_data: Dict[str, Any]) -> ReleasesTable:
         pass
