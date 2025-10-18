@@ -77,7 +77,6 @@ class ReleasesRepository(ReleaseRepositoryInterface):
                         .one()
                 )
 
-                # Atualiza dinamicamente os campos fornecidos
                 for key, value in update_data.items():
                     if hasattr(release, key):
                         setattr(release, key, value)

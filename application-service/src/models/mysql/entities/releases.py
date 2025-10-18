@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime, timezone
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Enum, Text
 from sqlalchemy.orm import relationship
 from src.models.mysql.settings.base import Base
 
@@ -27,6 +27,7 @@ class ReleasesTable(Base):
     env = Column(Enum(EnvironmentEnum, native_enum=False), nullable=False)
     status = Column(Enum(StatusEnum, native_enum=False), nullable=False, default=StatusEnum.CREATED)
     evidence_url = Column(String(1024), nullable=True)
+    deployment_logs = Column(Text, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     deployed_at = Column(DateTime, nullable=True)
 
