@@ -31,7 +31,6 @@ class ReleasesTable(Base):
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     deployed_at = Column(DateTime, nullable=True)
 
-    # Certifique-se que os nomes abaixo correspondem aos back_populates corretos
     application = relationship("ApplicationsTable", back_populates="releases")
     approvals = relationship("ApprovalsTable", back_populates="release")
 

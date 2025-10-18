@@ -16,10 +16,8 @@ class ReleasePromoterController:
         release = self.__get_release(release_id)
         self.__validate_release_status(release)
 
-        # Simula deployment
         deployment_success, deployment_logs = self.__fake_deployment(release)
 
-        # Atualiza release baseado no resultado do deployment
         release_updated = self.__update_release_after_deployment(
             release_id,
             release,
@@ -53,7 +51,6 @@ class ReleasePromoterController:
         Simula um deployment automatizado.
         Retorna: (sucesso: bool, logs: str)
         """
-        # Simula sucesso (90% de chance de sucesso)
         success = random.random() < 0.9
 
         target_env = self.__determine_target_environment(release.env)
@@ -120,7 +117,6 @@ class ReleasePromoterController:
             "status": self.__determine_new_status(release.status, deployment_success)
         }
 
-        # Se deployment foi bem-sucedido, atualiza o ambiente e deployed_at
         if deployment_success:
             update_data["env"] = self.__determine_target_environment(release.env)
             update_data["deployed_at"] = datetime.now(timezone.utc)
@@ -137,7 +133,7 @@ class ReleasePromoterController:
                 "env": release_updated.env.value,
                 "status": release_updated.status.value,
                 "evidence_url": release_updated.evidence_url,
-                "deployment_logs": release_updated.deployment_logs,
+                "logs": release_updated.deployment_logs,
                 "created_at": release_updated.created_at.isoformat(),
                 "deployed_at": release_updated.deployed_at.isoformat() if release_updated.deployed_at else None
             }

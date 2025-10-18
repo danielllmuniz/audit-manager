@@ -57,6 +57,7 @@ class ReleaseApproverController:
                 "env": release_updated.env.value,
                 "status": release_updated.status.value,
                 "evidence_url": release_updated.evidence_url,
+                "logs": release_updated.deployment_logs,
                 "created_at": release_updated.created_at.isoformat(),
                 "deployed_at": release_updated.deployed_at.isoformat() if release_updated.deployed_at else None
             }

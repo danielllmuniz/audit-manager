@@ -25,6 +25,7 @@ class ReleaseListerController:
                     "env": release.env.value,
                     "status": release.status.value,
                     "evidence_url": release.evidence_url,
+                    "logs": release.deployment_logs,
                     "created_at": release.created_at.isoformat(),
                     "deployed_at": release.deployed_at.isoformat() if release.deployed_at else None
                 }

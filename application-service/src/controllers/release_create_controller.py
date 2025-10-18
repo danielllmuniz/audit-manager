@@ -1,7 +1,10 @@
-from typing import Dict
+from typing import Dict, Tuple
+import random
+import uuid
+from datetime import datetime, timezone
 from src.models.mysql.interfaces.release_repository import ReleaseRepositoryInterface
 from src.models.mysql.interfaces.application_repository import ApplicationRepositoryInterface
-from src.models.mysql.entities.releases import ReleasesTable, EnvironmentEnum
+from src.models.mysql.entities.releases import ReleasesTable, EnvironmentEnum, StatusEnum
 from src.errors.error_types.http_not_found import HttpNotFoundError
 from src.errors.error_types.http_unprocessable_entity import HttpUnprocessableEntityError
 
@@ -18,16 +21,20 @@ class ReleaseCreatorController:
         application_id = release_info["application_id"]
         version = release_info["version"]
         env = release_info["env"]
-        evidence_url = release_info.get("evidence_url")
 
         self.__validate_application_exists(application_id)
         env_enum = self.__validate_and_convert_env(env)
+
+        validation_passed, evidence_url, validation_logs = self.__simulate_validation(version)
+        initial_status = StatusEnum.PENDING_PREPROD if validation_passed else StatusEnum.REJECTED
 
         release_created = self.__insert_release_in_db(
             application_id,
             version,
             env_enum,
-            evidence_url
+            evidence_url,
+            initial_status,
+            validation_logs
         )
         formated_response = self.__format_response(release_created)
         return formated_response
@@ -44,20 +51,60 @@ class ReleaseCreatorController:
             valid_envs = [e.value for e in EnvironmentEnum]
             raise HttpUnprocessableEntityError(f"Invalid environment '{env}'. Valid options: {valid_envs}")
 
+    def __simulate_validation(self, version: str) -> Tuple[bool, str, str]:
+        validation_passed = random.random() < 0.8
+
+        evidence_id = str(uuid.uuid4())
+        evidence_url = f"https://evidence.example.com/releases/{evidence_id}"
+
+        timestamp = datetime.now(timezone.utc).isoformat()
+        if validation_passed:
+            logs = f"""
+[{timestamp}] Starting automated validation for version {version}
+[{timestamp}] Running security checks... PASSED
+[{timestamp}] Running code quality analysis... PASSED
+[{timestamp}] Running unit tests... PASSED
+[{timestamp}] Running integration tests... PASSED
+[{timestamp}] All validations passed successfully
+[{timestamp}] Evidence stored at: {evidence_url}
+[{timestamp}] Release approved for PREPROD
+"""
+        else:
+            logs = f"""
+[{timestamp}] Starting automated validation for version {version}
+[{timestamp}] Running security checks... PASSED
+[{timestamp}] Running code quality analysis... FAILED
+[{timestamp}] ERROR: Code quality below threshold
+[{timestamp}] ERROR: Found 15 critical issues
+[{timestamp}] Validation failed
+[{timestamp}] Release REJECTED
+"""
+
+        return validation_passed, evidence_url, logs
+
     def __insert_release_in_db(
         self,
         application_id: int,
         version: str,
         env: EnvironmentEnum,
-        evidence_url: str = None
+        evidence_url: str,
+        status: StatusEnum,
+        validation_logs: str
     ) -> ReleasesTable:
         release_created = self.__release_repository.create_release(
             application_id,
             version,
             env,
-            evidence_url
+            evidence_url,
+            status
         )
-        return release_created
+
+        release_updated = self.__release_repository.update_release(
+            release_created.id,
+            {"deployment_logs": validation_logs}
+        )
+
+        return release_updated
 
     def __format_response(self, release_created: ReleasesTable) -> Dict:
         response = {
@@ -68,6 +115,7 @@ class ReleaseCreatorController:
                 "env": release_created.env.value,
                 "status": release_created.status.value,
                 "evidence_url": release_created.evidence_url,
+                "validation_logs": release_created.deployment_logs,
                 "created_at": release_created.created_at.isoformat()
             }
         }
