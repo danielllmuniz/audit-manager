@@ -37,6 +37,19 @@ class ApplicationsRepository(ApplicationRepositoryInterface):
             except NoResultFound:
                 return None
 
+    def get_application_by_name(self, name: str) -> ApplicationsTable:
+        with self.__db_connection as database:
+            try:
+                application = (
+                    database.session
+                        .query(ApplicationsTable)
+                        .filter(ApplicationsTable.name == name)
+                        .one()
+                )
+                return application
+            except NoResultFound:
+                return None
+
     def list_applications(self) -> List[ApplicationsTable]:
         with self.__db_connection as database:
             try:

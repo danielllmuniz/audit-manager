@@ -12,6 +12,10 @@ class ApplicationRepositoryInterface(ABC):
         pass
 
     @abstractmethod
+    def get_application_by_name(self, name: str) -> ApplicationsTable:
+        pass
+
+    @abstractmethod
     def list_applications(self) -> List[ApplicationsTable]:
         pass
 
