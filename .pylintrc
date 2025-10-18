@@ -12,7 +12,9 @@ disable=
       W0719,  # broad-exception-raised
       E1101,  # no-member
       C0103,  # invalid-name
-
+      R0913,  # too-many-arguments
+      R0917,  # too-many-positional-arguments
+      W0707,  # raise-missing-from
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
 # only in one or another interpreter, leading to false positives when analysed.
