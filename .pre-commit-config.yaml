@@ -6,6 +6,7 @@ repos:
         entry: pylint
         language: system
         types: [python]
+        files: ^application-service/
         args:
           - "-rn"  # Only display messages
           - "-sn"  # Don't display the score
