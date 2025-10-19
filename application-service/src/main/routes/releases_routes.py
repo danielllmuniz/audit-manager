@@ -14,7 +14,7 @@ release_route_bp = Blueprint('releases_routes', __name__)
 @release_route_bp.route('/releases', methods=['POST'])
 def create_release():
     try:
-        http_request = HttpRequest(body=request.json)
+        http_request = HttpRequest(body=request.json, headers=dict(request.headers))
         view = release_creator_composer()
 
         http_response = view.handle(http_request)
@@ -26,7 +26,7 @@ def create_release():
 @release_route_bp.route('/releases', methods=['GET'])
 def list_releases():
     try:
-        http_request = HttpRequest()
+        http_request = HttpRequest(headers=dict(request.headers))
         view = release_lister_composer()
 
         http_response = view.handle(http_request)

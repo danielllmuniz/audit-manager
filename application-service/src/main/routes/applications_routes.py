@@ -11,7 +11,7 @@ application_route_bp = Blueprint('applications_routes', __name__)
 @application_route_bp.route('/applications', methods=['POST'])
 def create_applications():
     try:
-        http_request = HttpRequest(body=request.json)
+        http_request = HttpRequest(body=request.json, headers=dict(request.headers))
         view = application_creator_composer()
 
         http_response = view.handle(http_request)
@@ -23,7 +23,7 @@ def create_applications():
 @application_route_bp.route('/applications', methods=['GET'])
 def list_applications():
     try:
-        http_request = HttpRequest()
+        http_request = HttpRequest(headers=dict(request.headers))
         view = application_lister_composer()
 
         http_response = view.handle(http_request)
