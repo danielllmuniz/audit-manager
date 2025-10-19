@@ -9,8 +9,8 @@ class ReleaseApproverView(ViewInterface):
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        user_role = release_approve_validator(http_request)
+        user_role, user_email = release_approve_validator(http_request)
         release_id = http_request.param.get("release_id")
-        body_response = self.__controller.approve(release_id, user_role)
+        body_response = self.__controller.approve(release_id, user_role, user_email)
 
         return HttpResponse(status_code=200, body=body_response)

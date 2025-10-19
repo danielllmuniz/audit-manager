@@ -1,20 +1,28 @@
 from typing import Dict
 from src.models.mysql.interfaces.release_repository import ReleaseRepositoryInterface
+from src.models.mysql.interfaces.approval_repository import ApprovalRepositoryInterface
 from src.models.mysql.entities.releases import ReleasesTable, StatusEnum
+from src.models.mysql.entities.approvals import OutcomeEnum
 from src.errors.error_types.http_not_found import HttpNotFoundError
 from src.errors.error_types.http_unprocessable_entity import HttpUnprocessableEntityError
 from src.errors.error_types.http_bad_request import HttpBadRequestError
 
 class ReleaseApproverController:
-    def __init__(self, release_repository: ReleaseRepositoryInterface) -> None:
+    def __init__(
+        self,
+        release_repository: ReleaseRepositoryInterface,
+        approval_repository: ApprovalRepositoryInterface
+    ) -> None:
         self.__release_repository = release_repository
+        self.__approval_repository = approval_repository
 
-    def approve(self, release_id: int, user_role: str) -> Dict:
+    def approve(self, release_id: int, user_role: str, user_email: str) -> Dict:
         self.__validate_user_role(user_role)
         release = self.__get_release(release_id)
         self.__validate_release_status(release)
         new_status = self.__determine_new_status(release.status)
         release_updated = self.__update_release_status(release_id, new_status)
+        self.__create_approval_record(release_id, user_email, OutcomeEnum.APPROVED)
         formated_response = self.__format_response(release_updated)
         return formated_response
 
@@ -47,6 +55,14 @@ class ReleaseApproverController:
         update_data = {"status": new_status}
         release_updated = self.__release_repository.update_release(release_id, update_data)
         return release_updated
+
+    def __create_approval_record(self, release_id: int, approver_email: str, outcome: OutcomeEnum) -> None:
+        self.__approval_repository.create_approval(
+            release_id=release_id,
+            approver_email=approver_email,
+            outcome=outcome,
+            notes=f"Release {outcome.value.lower()} by approver"
+        )
 
     def __format_response(self, release_updated: ReleasesTable) -> Dict:
         response = {
