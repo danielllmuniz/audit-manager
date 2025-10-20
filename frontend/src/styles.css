@@ -44,3 +44,9 @@ body {
     color: white !important;
   }
 }
+
+.button-spinner {
+  ::ng-deep .mat-mdc-progress-spinner circle {
+    stroke: white !important;
+  }
+}

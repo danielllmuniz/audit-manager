@@ -1,13 +1,18 @@
 export interface Application {
-  id?: number;
+  application_id?: number;
   name: string;
-  ownerTeam: string;
-  repoUrl: string;
+  owner_team: string;
+  repo_url: string;
+  created_at?: string;
+
+  id?: number;
+  ownerTeam?: string;
+  repoUrl?: string;
   createdAt?: Date;
 }
 
 export interface CreateApplicationRequest {
   name: string;
-  ownerTeam: string;
-  repoUrl: string;
+  owner_team: string;
+  repo_url: string;
 }

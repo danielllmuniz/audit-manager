@@ -1,0 +1,59 @@
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Aurora GeoEnergy</h1>
+        <p class="subtitle">Release Management System</p>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div class="login-content">
+        <p class="instructions">Selecione seu perfil para acessar o sistema:</p>
+
+        <div class="login-buttons">
+          <button 
+            mat-raised-button 
+            color="primary" 
+            class="login-button"
+            (click)="loginAs('dev')"
+            [disabled]="loading">
+            <mat-icon>code</mat-icon>
+            <span>Developer</span>
+          </button>
+
+          <button 
+            mat-raised-button 
+            color="primary" 
+            class="login-button approver-button"
+            (click)="loginAs('approver')"
+            [disabled]="loading">
+            <mat-icon>verified</mat-icon>
+            <span>Approver</span>
+          </button>
+
+          <button 
+            mat-raised-button 
+            color="warn" 
+            class="login-button"
+            (click)="loginAs('devops')"
+            [disabled]="loading">
+            <mat-icon>cloud_upload</mat-icon>
+            <span>DevOps</span>
+          </button>
+        </div>
+
+        @if (loading) {
+          <mat-progress-bar 
+            mode="indeterminate"
+            class="progress-bar">
+          </mat-progress-bar>
+        }
+      </div>
+    </mat-card-content>
+
+    <mat-card-footer>
+      <p class="footer-text">© 2025 Aurora GeoEnergy - Ambiente de Desenvolvimento</p>
+    </mat-card-footer>
+  </mat-card>
+</div>

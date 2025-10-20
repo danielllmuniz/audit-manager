@@ -1,0 +1,46 @@
+h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+mat-dialog-content {
+  padding: 20px 24px;
+  min-height: 200px;
+}
+
+.application-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .full-width {
+    width: 100%;
+  }
+
+  mat-form-field {
+    mat-icon[matPrefix] {
+      margin-right: 12px;
+      color: rgba(0, 0, 0, 0.54);
+    }
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  margin: 0;
+
+  button {
+    margin-left: 8px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    .button-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+}

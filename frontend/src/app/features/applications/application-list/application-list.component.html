@@ -1,0 +1,102 @@
+<div class="applications-container">
+  <div class="header">
+    <div class="title-section">
+      <h1>Applications</h1>
+      <p class="subtitle">Gerencie as aplicações cadastradas no sistema</p>
+    </div>
+    <button 
+      mat-raised-button 
+      color="primary"
+      (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Nova Application
+    </button>
+  </div>
+
+  <mat-card class="table-card">
+    <mat-card-content>
+      @if (loading) {
+        <div class="loading-container">
+          <mat-spinner></mat-spinner>
+          <p>Carregando applications...</p>
+        </div>
+      } @else if (applications.length === 0) {
+        <div class="empty-state">
+          <mat-icon class="empty-icon">apps</mat-icon>
+          <h2>Nenhuma application cadastrada</h2>
+          <p>Comece criando sua primeira application</p>
+          <button 
+            mat-raised-button 
+            color="primary"
+            (click)="openCreateDialog()">
+            <mat-icon>add</mat-icon>
+            Criar Application
+          </button>
+        </div>
+      } @else {
+        <div class="table-container">
+          <table mat-table [dataSource]="applications" class="applications-table">
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef>ID</th>
+              <td mat-cell *matCellDef="let app">#{{ app.id }}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Nome</th>
+              <td mat-cell *matCellDef="let app">
+                <strong>{{ app.name }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Owner Team Column -->
+            <ng-container matColumnDef="ownerTeam">
+              <th mat-header-cell *matHeaderCellDef>Time Responsável</th>
+              <td mat-cell *matCellDef="let app">
+                <mat-chip>{{ app.ownerTeam }}</mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Repo URL Column -->
+            <ng-container matColumnDef="repoUrl">
+              <th mat-header-cell *matHeaderCellDef>Repositório</th>
+              <td mat-cell *matCellDef="let app">
+                <a [href]="app.repoUrl" target="_blank" class="repo-link">
+                  <mat-icon class="link-icon">link</mat-icon>
+                  {{ app.repoUrl | slice:0:40 }}{{ app.repoUrl.length > 40 ? '...' : '' }}
+                </a>
+              </td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Criado em</th>
+              <td mat-cell *matCellDef="let app">
+                {{ app.createdAt | date:'dd/MM/yyyy HH:mm' }}
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <td mat-cell *matCellDef="let app">
+                <button 
+                  mat-icon-button 
+                  color="primary"
+                  [routerLink]="['/releases/new']"
+                  [queryParams]="{ applicationId: app.id }"
+                  matTooltip="Criar Release">
+                  <mat-icon>rocket_launch</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
