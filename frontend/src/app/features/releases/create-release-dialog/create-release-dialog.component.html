@@ -1,0 +1,74 @@
+<h2 mat-dialog-title>Novo Release</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="releaseForm" class="release-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Application</mat-label>
+      <mat-select formControlName="applicationId" required>
+        <mat-option *ngFor="let app of applications" [value]="app.id || app.application_id">
+          {{ app.name }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>apps</mat-icon>
+      @if (releaseForm.get('applicationId')?.hasError('required') && releaseForm.get('applicationId')?.touched) {
+        <mat-error>Application é obrigatória</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Versão</mat-label>
+      <input 
+        matInput 
+        formControlName="version"
+        placeholder="Ex: 1.0.0, v2.3.1"
+        required>
+      <mat-icon matPrefix>tag</mat-icon>
+      <mat-hint>Use semantic versioning (ex: 1.0.0)</mat-hint>
+      @if (releaseForm.get('version')?.hasError('required') && releaseForm.get('version')?.touched) {
+        <mat-error>Versão é obrigatória</mat-error>
+      }
+      @if (releaseForm.get('version')?.hasError('pattern')) {
+        <mat-error>Formato inválido (use: 1.0.0 ou v1.0.0)</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-card class="info-card">
+      <mat-card-content>
+        <div class="info-section">
+          <mat-icon color="primary">info</mat-icon>
+          <div class="info-text">
+            <strong>Próximos passos após a criação:</strong>
+            <ul>
+              <li>O release será criado no ambiente <strong>DEV</strong></li>
+              <li>Validações automáticas de segurança serão executadas</li>
+              <li>Se aprovado, o status mudará para <strong>PENDING_PREPROD</strong></li>
+              <li>Um Approver precisará aprovar antes da promoção</li>
+            </ul>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button 
+    mat-button 
+    mat-dialog-close
+    [disabled]="saving">
+    Cancelar
+  </button>
+  <button 
+    mat-raised-button 
+    color="primary"
+    (click)="onSubmit()"
+    [disabled]="releaseForm.invalid || saving">
+    @if (saving) {
+      <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
+      <span>Criando...</span>
+    } @else {
+      <mat-icon>rocket_launch</mat-icon>
+      <span>Criar Release</span>
+    }
+  </button>
+</mat-dialog-actions>

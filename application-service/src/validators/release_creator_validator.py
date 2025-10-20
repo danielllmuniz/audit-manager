@@ -6,7 +6,7 @@ def release_creator_validator(http_request: HttpRequest) -> None:
     class BodyData(BaseModel):
         application_id: int
         version: constr(min_length=1) # type: ignore
-        env: constr(min_length=1)  # type: ignore
+        env: str = None  # type: ignore
         evidence_url: str = None  # type: ignore
 
     try:

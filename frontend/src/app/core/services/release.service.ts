@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
   ApprovalRequest,
@@ -15,6 +15,14 @@ export interface ReleaseFilters {
   applicationId?: number;
   version?: string;
   status?: ReleaseStatus;
+}
+
+interface ReleaseListResponse {
+  data: Release[];
+}
+
+interface ReleaseResponse {
+  data: Release;
 }
 
 @Injectable({
@@ -43,29 +51,70 @@ export class ReleaseService {
       }
     }
 
-    return this.http.get<Release[]>(this.apiUrl, { params });
+    return this.http.get<ReleaseListResponse>(this.apiUrl, { params }).pipe(
+      map((response) => {
+        const releases = response.data
+          ? response.data.map((r) => this.mapRelease(r))
+          : [];
+        return releases;
+      }),
+      tap((data) => console.log('Releases received:', data))
+    );
   }
 
   getReleaseById(id: number): Observable<Release> {
-    return this.http.get<Release>(`${this.apiUrl}/${id}`);
+    return this.http
+      .get<ReleaseResponse>(`${this.apiUrl}/${id}`)
+      .pipe(map((response) => this.mapRelease(response.data)));
   }
 
   createRelease(request: CreateReleaseRequest): Observable<Release> {
-    return this.http.post<Release>(this.apiUrl, request);
+    console.log('Creating release:', request);
+    return this.http.post<ReleaseResponse>(this.apiUrl, request).pipe(
+      map((response) => this.mapRelease(response.data)),
+      tap((data) => console.log('Release created:', data))
+    );
   }
 
   approveRelease(id: number, request: ApprovalRequest): Observable<Release> {
-    return this.http.post<Release>(`${this.apiUrl}/${id}/approve`, request);
+    return this.http
+      .post<ReleaseResponse>(`${this.apiUrl}/${id}/approve`, request)
+      .pipe(map((response) => this.mapRelease(response.data)));
   }
 
   disapproveRelease(id: number, request: ApprovalRequest): Observable<Release> {
-    return this.http.post<Release>(`${this.apiUrl}/${id}/disapprove`, request);
+    return this.http
+      .post<ReleaseResponse>(`${this.apiUrl}/${id}/disapprove`, request)
+      .pipe(map((response) => this.mapRelease(response.data)));
   }
 
   promoteRelease(id: number): Observable<PromoteReleaseResponse> {
-    return this.http.post<PromoteReleaseResponse>(
-      `${this.apiUrl}/${id}/promote`,
-      {}
+    return this.http.post<any>(`${this.apiUrl}/${id}/promote`, {}).pipe(
+      map((response) => {
+        if (response.data) {
+          return {
+            success: true,
+            message: 'Release promovido com sucesso',
+            release: this.mapRelease(response.data),
+          };
+        }
+        return response;
+      })
     );
+  }
+
+  private mapRelease(release: Release): Release {
+    return {
+      ...release,
+      id: release.release_id,
+      releaseId: release.release_id,
+      applicationId: release.application_id,
+      evidenceUrl: release.evidence_url,
+      createdAt: release.created_at ? new Date(release.created_at) : undefined,
+      deployedAt: release.deployed_at
+        ? new Date(release.deployed_at)
+        : undefined,
+      applicationName: release.application_name,
+    };
   }
 }

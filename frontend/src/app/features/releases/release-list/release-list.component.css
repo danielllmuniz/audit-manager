@@ -1,0 +1,285 @@
+.releases-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+
+  .title-section {
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: #666;
+      font-size: 14px;
+    }
+  }
+
+  button {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Filtros
+.filters-card {
+  margin-bottom: 24px;
+
+  mat-card-content {
+    padding: 16px;
+  }
+}
+
+.filters-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: start;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  .filter-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding-top: 8px;
+
+    button {
+      mat-icon {
+        margin-right: 4px;
+      }
+    }
+  }
+}
+
+// Tabela
+.table-card {
+  mat-card-content {
+    padding: 0;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+
+  p {
+    margin-top: 16px;
+    color: #666;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+
+  .empty-icon {
+    font-size: 72px;
+    width: 72px;
+    height: 72px;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+    font-size: 20px;
+    color: #333;
+  }
+
+  p {
+    margin: 0 0 24px;
+    color: #666;
+  }
+
+  button mat-icon {
+    margin-right: 8px;
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.releases-table {
+  width: 100%;
+
+  th {
+    font-weight: 600;
+    color: #666;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 16px;
+
+    strong {
+      font-weight: 500;
+      color: #333;
+    }
+
+    .no-evidence {
+      color: #999;
+      font-size: 14px;
+    }
+  }
+
+  tr.mat-mdc-row:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+// Chips
+.version-chip {
+  background-color: #e3f2fd !important;
+  color: #1565c0 !important;
+  font-weight: 600;
+  font-size: 12px;
+  height: 28px;
+}
+
+// Environment Chips
+.env-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  height: 28px;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &.env-dev {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+  }
+
+  &.env-preprod {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+  }
+
+  &.env-prod {
+    background-color: #ffebee !important;
+    color: #c62828 !important;
+  }
+}
+
+// Status Chips
+.status-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  font-size: 12px;
+  height: 28px;
+  min-width: 140px;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &.status-created {
+    background-color: #f5f5f5 !important;
+    color: #616161 !important;
+  }
+
+  &.status-pending {
+    background-color: #fff9c4 !important;
+    color: #f57f17 !important;
+  }
+
+  &.status-approved {
+    background-color: #c8e6c9 !important;
+    color: #2e7d32 !important;
+  }
+
+  &.status-rejected {
+    background-color: #ffcdd2 !important;
+    color: #c62828 !important;
+  }
+
+  &.status-deployed {
+    background-color: #b3e5fc !important;
+    color: #01579b !important;
+  }
+}
+
+// Action Buttons
+.action-buttons {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+// Responsivo
+@media (max-width: 1200px) {
+  .filters-form {
+    grid-template-columns: repeat(2, 1fr);
+
+    .filter-actions {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+@media (max-width: 960px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .filters-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .releases-table {
+    font-size: 12px;
+
+    td {
+      padding: 8px;
+    }
+  }
+
+  .status-chip,
+  .env-chip {
+    font-size: 10px;
+    min-width: auto;
+    padding: 4px 8px;
+  }
+}

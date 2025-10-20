@@ -1,20 +1,28 @@
 import { Environment, ReleaseStatus } from './enums';
 
 export interface Release {
-  id?: number;
-  applicationId: number;
+  release_id?: number;
+  application_id: number;
   version: string;
   env: Environment;
   status: ReleaseStatus;
+  evidence_url?: string;
+  created_at?: string;
+  deployed_at?: string;
+  logs?: string;
+  application_name?: string;
+
+  id?: number;
+  releaseId?: number;
+  applicationId?: number;
   evidenceUrl?: string;
   createdAt?: Date;
   deployedAt?: Date;
-  logs?: string;
   applicationName?: string;
 }
 
 export interface CreateReleaseRequest {
-  applicationId: number;
+  application_id: number;
   version: string;
 }
 

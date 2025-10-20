@@ -1,0 +1,142 @@
+h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .title-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+mat-dialog-content {
+  padding: 20px 24px;
+  min-height: 300px;
+}
+
+.release-info {
+  margin-bottom: 20px;
+
+  mat-card {
+    background-color: #f5f5f5;
+
+    mat-card-content {
+      padding: 16px;
+    }
+  }
+
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #e0e0e0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-weight: 500;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .value {
+      font-weight: 500;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .env-chip,
+    .status-chip {
+      font-size: 11px;
+      height: 24px;
+      font-weight: 600;
+    }
+
+    .status-chip {
+      &.status-pending {
+        background-color: #fff9c4 !important;
+        color: #f57f17 !important;
+      }
+    }
+  }
+}
+
+.approval-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .full-width {
+    width: 100%;
+  }
+
+  mat-form-field {
+    mat-icon[matPrefix] {
+      margin-right: 12px;
+      color: rgba(0, 0, 0, 0.54);
+      align-self: flex-start;
+      margin-top: 12px;
+    }
+  }
+}
+
+.warning-card {
+  background-color: #ffebee;
+  margin-top: 8px;
+
+  mat-card-content {
+    padding: 16px;
+  }
+
+  .warning-section {
+    display: flex;
+    gap: 12px;
+
+    mat-icon {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .warning-text {
+      flex: 1;
+
+      strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #c62828;
+      }
+
+      p {
+        margin: 0;
+        font-size: 13px;
+        color: #424242;
+      }
+    }
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  margin: 0;
+
+  button {
+    margin-left: 8px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    .button-spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+}

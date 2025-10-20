@@ -20,7 +20,7 @@ class ReleaseCreatorController:
     def create(self, release_info: Dict) -> Dict:
         application_id = release_info["application_id"]
         version = release_info["version"]
-        env = release_info["env"]
+        env = release_info.get("env", "DEV")
 
         self.__validate_application_exists(application_id)
         env_enum = self.__validate_and_convert_env(env)

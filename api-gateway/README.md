@@ -92,9 +92,11 @@ Content-Type: application/json
 
 {
   "application_id": 1,
-  "version": "v1.0.0",
-  "environment": "DEV"
+  "version": "v1.0.0"
 }
+
+# Note: The 'env' field is optional and defaults to "DEV" if not provided.
+# You can optionally specify: "env": "DEV" | "PREPROD" | "PROD"
 
 # List releases (DEV, APPROVER, DEVOPS)
 GET /api/v1/releases
