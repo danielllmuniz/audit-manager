@@ -4,13 +4,15 @@
       <h1>Releases</h1>
       <p class="subtitle">Gerencie os releases das aplicações</p>
     </div>
-    <button 
-      mat-raised-button 
-      color="primary"
-      (click)="openCreateDialog()">
-      <mat-icon>add</mat-icon>
-      Novo Release
-    </button>
+    @if (canCreateReleases()) {
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="openCreateDialog()">
+        <mat-icon>add</mat-icon>
+        Novo Release
+      </button>
+    }
   </div>
 
   <!-- Tabela -->
@@ -25,14 +27,18 @@
         <div class="empty-state">
           <mat-icon class="empty-icon">rocket_launch</mat-icon>
           <h2>Nenhum release encontrado</h2>
-          <p>Crie seu primeiro release para começar</p>
-          <button 
-            mat-raised-button 
-            color="primary"
-            (click)="openCreateDialog()">
-            <mat-icon>add</mat-icon>
-            Criar Release
-          </button>
+          @if (canCreateReleases()) {
+            <p>Crie seu primeiro release para começar</p>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="openCreateDialog()">
+              <mat-icon>add</mat-icon>
+              Criar Release
+            </button>
+          } @else {
+            <p>Não há releases cadastrados no sistema</p>
+          }
         </div>
       } @else {
         <div class="table-container">

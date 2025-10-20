@@ -4,9 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 import { Application } from '../../../core/models';
 import { ApplicationService } from '../../../core/services/application.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { MaterialModule } from '../../../shared/material.module';
 import { CreateApplicationDialogComponent } from '../create-application-dialog/create-application-dialog.component';
+import { CreateReleaseDialogComponent } from '../../releases/create-release-dialog/create-release-dialog.component';
 
 @Component({
   selector: 'app-application-list',
@@ -29,6 +31,7 @@ export class ApplicationListComponent implements OnInit {
 
   constructor(
     private applicationService: ApplicationService,
+    private authService: AuthService,
     private notificationService: NotificationService,
     private dialog: MatDialog
   ) {}
@@ -62,5 +65,25 @@ export class ApplicationListComponent implements OnInit {
         this.loadApplications();
       }
     });
+  }
+
+  openCreateReleaseDialog(application: Application): void {
+    const dialogRef = this.dialog.open(CreateReleaseDialogComponent, {
+      width: '600px',
+      disableClose: false,
+      data: {
+        applications: [application]
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.notificationService.showSuccess('Release criada com sucesso!');
+      }
+    });
+  }
+
+  canCreateApplications(): boolean {
+    return this.authService.hasRole('DEV');
   }
 }

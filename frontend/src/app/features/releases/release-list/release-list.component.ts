@@ -207,4 +207,8 @@ export class ReleaseListComponent implements OnInit {
   getEnvironmentIcon(env: Environment): string {
     return getEnvironmentConfig(env).icon;
   }
+
+  canCreateReleases(): boolean {
+    return this.authService.hasRole('DEV');
+  }
 }
