@@ -61,6 +61,7 @@ class ReleaseDisapproverController:
             "data": {
                 "release_id": release_updated.id,
                 "application_id": release_updated.application_id,
+                "application_name": release_updated.application.name if release_updated.application else None,
                 "version": release_updated.version,
                 "env": release_updated.env.value,
                 "status": release_updated.status.value,

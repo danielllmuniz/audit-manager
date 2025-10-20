@@ -111,6 +111,7 @@ class ReleaseCreatorController:
             "data": {
                 "release_id": release_created.id,
                 "application_id": release_created.application_id,
+                "application_name": release_created.application.name if release_created.application else None,
                 "version": release_created.version,
                 "env": release_created.env.value,
                 "status": release_created.status.value,

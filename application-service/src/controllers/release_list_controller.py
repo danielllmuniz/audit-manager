@@ -21,6 +21,7 @@ class ReleaseListerController:
                 {
                     "release_id": release.id,
                     "application_id": release.application_id,
+                    "application_name": release.application.name if release.application else None,
                     "version": release.version,
                     "env": release.env.value,
                     "status": release.status.value,

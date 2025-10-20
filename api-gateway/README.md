@@ -102,6 +102,24 @@ Content-Type: application/json
 GET /api/v1/releases
 Authorization: Bearer <token>
 
+Response:
+{
+  "data": [
+    {
+      "release_id": 1,
+      "application_id": 1,
+      "application_name": "My Application",
+      "version": "v1.0.0",
+      "env": "DEV",
+      "status": "PENDING_PREPROD",
+      "evidence_url": "https://evidence.example.com/releases/...",
+      "logs": "[timestamp] validation logs...",
+      "created_at": "2025-10-20T...",
+      "deployed_at": null
+    }
+  ]
+}
+
 # Approve release (APPROVER only)
 POST /api/v1/releases/{id}/approve
 Authorization: Bearer <approver-token>

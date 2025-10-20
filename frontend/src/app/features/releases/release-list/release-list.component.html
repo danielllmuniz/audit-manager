@@ -13,68 +13,6 @@
     </button>
   </div>
 
-  <!-- Filtros -->
-  <mat-card class="filters-card">
-    <mat-card-content>
-      <form [formGroup]="filterForm" class="filters-form">
-        <mat-form-field appearance="outline">
-          <mat-label>Application</mat-label>
-          <mat-select formControlName="applicationId">
-            <mat-option [value]="null">Todas</mat-option>
-            <mat-option *ngFor="let app of applications" [value]="app.id || app.application_id">
-              {{ app.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Ambiente</mat-label>
-          <mat-select formControlName="env">
-            <mat-option [value]="null">Todos</mat-option>
-            <mat-option value="DEV">DEV</mat-option>
-            <mat-option value="PREPROD">PRE-PROD</mat-option>
-            <mat-option value="PROD">PROD</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Status</mat-label>
-          <mat-select formControlName="status">
-            <mat-option [value]="null">Todos</mat-option>
-            <mat-option value="CREATED">Criado</mat-option>
-            <mat-option value="PENDING_PREPROD">Aguardando PRE-PROD</mat-option>
-            <mat-option value="PENDING_PROD">Aguardando PROD</mat-option>
-            <mat-option value="APPROVED_PREPROD">Aprovado PRE-PROD</mat-option>
-            <mat-option value="APPROVED_PROD">Aprovado PROD</mat-option>
-            <mat-option value="REJECTED">Rejeitado</mat-option>
-            <mat-option value="DEPLOYED">Implantado</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Versão</mat-label>
-          <input matInput formControlName="version" placeholder="Ex: 1.0.0">
-        </mat-form-field>
-
-        <div class="filter-actions">
-          <button 
-            mat-raised-button 
-            color="primary"
-            (click)="applyFilters()">
-            <mat-icon>search</mat-icon>
-            Filtrar
-          </button>
-          <button 
-            mat-button
-            (click)="clearFilters()">
-            <mat-icon>clear</mat-icon>
-            Limpar
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
-
   <!-- Tabela -->
   <mat-card class="table-card">
     <mat-card-content>
