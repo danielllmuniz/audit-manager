@@ -1,5 +1,5 @@
 from src.controllers.interfaces.release_list_controller import ReleaseListController
-from src.validators.dev_role_validator import dev_role_validator
+from src.validators.list_role_validator import list_role_validator
 from .http_types.http_request import HttpRequest
 from .http_types.http_response import HttpResponse
 from .interfaces.view_interface import ViewInterface
@@ -9,6 +9,6 @@ class ReleaseListerView(ViewInterface):
         self.__controller = controller
 
     def handle(self, http_request: HttpRequest) -> HttpResponse:
-        dev_role_validator(http_request)
+        list_role_validator(http_request)
         body_response = self.__controller.list()
         return HttpResponse(status_code=200, body=body_response)

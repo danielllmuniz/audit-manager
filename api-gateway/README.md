@@ -81,9 +81,9 @@ Content-Type: application/json
   "repo_url": "https://github.com/org/repo"
 }
 
-# List applications (DEV only)
+# List applications (DEV, APPROVER, DEVOPS)
 GET /api/v1/applications
-Authorization: Bearer <dev-token>
+Authorization: Bearer <token>
 
 # Create release (DEV only)
 POST /api/v1/releases
@@ -95,6 +95,10 @@ Content-Type: application/json
   "version": "v1.0.0",
   "environment": "DEV"
 }
+
+# List releases (DEV, APPROVER, DEVOPS)
+GET /api/v1/releases
+Authorization: Bearer <token>
 
 # Approve release (APPROVER only)
 POST /api/v1/releases/{id}/approve
