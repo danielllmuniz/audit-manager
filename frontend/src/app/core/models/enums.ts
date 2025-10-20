@@ -20,7 +20,7 @@ export enum ApprovalOutcome {
 }
 
 export enum UserRole {
+  DEV = 'DEV',
   APPROVER = 'APPROVER',
   DEVOPS = 'DEVOPS',
-  DEVELOPER = 'DEVELOPER',
 }

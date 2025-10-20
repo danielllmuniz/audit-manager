@@ -1,18 +1,18 @@
 import { UserRole } from './enums';
 
 export interface User {
+  id: number;
   email: string;
   name: string;
   role: UserRole;
-  token?: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
 }
 
 export interface LoginResponse {
-  user: User;
-  token: string;
+  data: {
+    type: string;
+    attributes: {
+      token: string;
+      user: User;
+    };
+  };
 }
