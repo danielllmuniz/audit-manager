@@ -89,17 +89,27 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let app">
-                @if (canCreateApplications()) {
+                <div class="action-buttons">
+                  <!-- View Details -->
                   <button
                     mat-icon-button
                     color="primary"
-                    (click)="openCreateReleaseDialog(app)"
-                    matTooltip="Create Release">
-                    <mat-icon>rocket_launch</mat-icon>
+                    [routerLink]="['/applications', app.id || app.application_id]"
+                    matTooltip="View Details">
+                    <mat-icon>visibility</mat-icon>
                   </button>
-                } @else {
-                  <span class="no-actions">—</span>
-                }
+
+                  <!-- Create Release -->
+                  @if (canCreateApplications()) {
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="openCreateReleaseDialog(app)"
+                      matTooltip="Create Release">
+                      <mat-icon>rocket_launch</mat-icon>
+                    </button>
+                  }
+                </div>
               </td>
             </ng-container>
 

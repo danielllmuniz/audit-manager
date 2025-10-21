@@ -40,7 +40,6 @@ export class ReleaseListComponent implements OnInit {
     'env',
     'status',
     'createdAt',
-    'evidence',
     'actions',
   ];
 
@@ -159,10 +158,6 @@ export class ReleaseListComponent implements OnInit {
     });
   }
 
-  viewLogs(release: Release): void {
-    alert(`Logs for Release ${release.version}:\n\n${release.logs}`);
-  }
-
   canApprove(release: Release): boolean {
     const user = this.authService.currentUserValue;
     if (!user || user.role !== UserRole.APPROVER) return false;
@@ -214,27 +209,5 @@ export class ReleaseListComponent implements OnInit {
 
   canCreateReleases(): boolean {
     return this.authService.hasRole('DEV');
-  }
-
-  downloadEvidence(release: Release): void {
-    const evidenceUrl = release.evidence_url || release.evidenceUrl;
-    if (!evidenceUrl) return;
-
-    this.releaseService.downloadEvidence(evidenceUrl).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `evidence_${release.version}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-      },
-      error: (error) => {
-        console.error('Error downloading evidence:', error);
-        this.notificationService.showError('Error downloading evidence file');
-      },
-    });
   }
 }

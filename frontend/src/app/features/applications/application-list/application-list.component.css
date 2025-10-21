@@ -150,6 +150,12 @@
     background-color: #f5f5f5;
   }
 
+  .action-buttons {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
   .no-actions {
     color: #ccc;
     font-size: 14px;
