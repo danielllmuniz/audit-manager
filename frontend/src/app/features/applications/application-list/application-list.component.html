@@ -2,7 +2,7 @@
   <div class="header">
     <div class="title-section">
       <h1>Applications</h1>
-      <p class="subtitle">Gerencie as aplicações cadastradas no sistema</p>
+      <p class="subtitle">Manage registered applications in the system</p>
     </div>
     @if (canCreateApplications()) {
       <button
@@ -10,7 +10,7 @@
         color="primary"
         (click)="openCreateDialog()">
         <mat-icon>add</mat-icon>
-        Nova Application
+        New Application
       </button>
     }
   </div>
@@ -20,23 +20,23 @@
       @if (loading) {
         <div class="loading-container">
           <mat-spinner></mat-spinner>
-          <p>Carregando applications...</p>
+          <p>Loading applications...</p>
         </div>
       } @else if (applications.length === 0) {
         <div class="empty-state">
           <mat-icon class="empty-icon">apps</mat-icon>
-          <h2>Nenhuma application cadastrada</h2>
+          <h2>No registered applications</h2>
           @if (canCreateApplications()) {
-            <p>Comece criando sua primeira application</p>
+            <p>Start by creating your first application</p>
             <button
               mat-raised-button
               color="primary"
               (click)="openCreateDialog()">
               <mat-icon>add</mat-icon>
-              Criar Application
+              Create Application
             </button>
           } @else {
-            <p>Não há applications cadastradas no sistema</p>
+            <p>No applications registered in the system</p>
           }
         </div>
       } @else {
@@ -50,7 +50,7 @@
 
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef>Nome</th>
+              <th mat-header-cell *matHeaderCellDef>Name</th>
               <td mat-cell *matCellDef="let app">
                 <a [routerLink]="['/applications', app.id]" class="app-name-link">
                   <strong>{{ app.name }}</strong>
@@ -60,7 +60,7 @@
 
             <!-- Owner Team Column -->
             <ng-container matColumnDef="ownerTeam">
-              <th mat-header-cell *matHeaderCellDef>Time Responsável</th>
+              <th mat-header-cell *matHeaderCellDef>Owner Team</th>
               <td mat-cell *matCellDef="let app">
                 <mat-chip>{{ app.ownerTeam }}</mat-chip>
               </td>
@@ -68,7 +68,7 @@
 
             <!-- Repo URL Column -->
             <ng-container matColumnDef="repoUrl">
-              <th mat-header-cell *matHeaderCellDef>Repositório</th>
+              <th mat-header-cell *matHeaderCellDef>Repository</th>
               <td mat-cell *matCellDef="let app">
                 <a [href]="app.repoUrl" target="_blank" class="repo-link">
                   <mat-icon class="link-icon">link</mat-icon>
@@ -79,7 +79,7 @@
 
             <!-- Created At Column -->
             <ng-container matColumnDef="createdAt">
-              <th mat-header-cell *matHeaderCellDef>Criado em</th>
+              <th mat-header-cell *matHeaderCellDef>Created At</th>
               <td mat-cell *matCellDef="let app">
                 {{ app.createdAt | date:'dd/MM/yyyy HH:mm' }}
               </td>
@@ -87,14 +87,14 @@
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Ações</th>
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let app">
                 @if (canCreateApplications()) {
                   <button
                     mat-icon-button
                     color="primary"
                     (click)="openCreateReleaseDialog(app)"
-                    matTooltip="Criar Release">
+                    matTooltip="Create Release">
                     <mat-icon>rocket_launch</mat-icon>
                   </button>
                 } @else {

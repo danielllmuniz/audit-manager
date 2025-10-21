@@ -52,7 +52,7 @@ export class ApplicationDetailComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar application:', error);
+        console.error('Error loading application:', error);
         this.loading = false;
         this.router.navigate(['/applications']);
       },

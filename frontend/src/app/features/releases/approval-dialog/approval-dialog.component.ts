@@ -57,7 +57,7 @@ export class ApprovalDialogComponent {
 
     const releaseId = this.release.id || this.release.release_id;
     if (!releaseId) {
-      this.notificationService.showError('ID do release não encontrado');
+      this.notificationService.showError('Release ID not found');
       this.saving = false;
       return;
     }
@@ -68,14 +68,14 @@ export class ApprovalDialogComponent {
 
     serviceCall.subscribe({
       next: (release) => {
-        const action = this.isApproval ? 'aprovado' : 'rejeitado';
+        const action = this.isApproval ? 'approved' : 'rejected';
         this.notificationService.showSuccess(
-          `Release ${this.release.version} ${action} com sucesso!`
+          `Release ${this.release.version} ${action} successfully!`
         );
         this.dialogRef.close(true);
       },
       error: (error) => {
-        console.error('Erro ao processar aprovação:', error);
+        console.error('Error processing approval:', error);
         this.saving = false;
       },
     });

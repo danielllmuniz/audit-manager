@@ -48,7 +48,7 @@ export class ApplicationListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar applications:', error);
+        console.error('Error loading applications:', error);
         this.loading = false;
       },
     });
@@ -78,7 +78,7 @@ export class ApplicationListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.notificationService.showSuccess('Release criada com sucesso!');
+        this.notificationService.showSuccess('Release created successfully!');
       }
     });
   }

@@ -78,7 +78,7 @@ export class ReleaseListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Erro ao carregar releases:', error);
+        console.error('Error loading releases:', error);
         this.loading = false;
       },
     });
@@ -131,18 +131,18 @@ export class ReleaseListComponent implements OnInit {
     this.releaseService.promoteRelease(releaseId).subscribe({
       next: (response) => {
         this.notificationService.showSuccess(
-          `Release ${release.version} promovido com sucesso!`
+          `Release ${release.version} promoted successfully!`
         );
         this.loadReleases();
       },
       error: (error) => {
-        console.error('Erro ao promover release:', error);
+        console.error('Error promoting release:', error);
       },
     });
   }
 
   viewLogs(release: Release): void {
-    alert(`Logs do Release ${release.version}:\n\n${release.logs}`);
+    alert(`Logs for Release ${release.version}:\n\n${release.logs}`);
   }
 
   canApprove(release: Release): boolean {

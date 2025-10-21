@@ -30,7 +30,7 @@ export class LayoutComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    this.notificationService.showInfo('Você saiu do sistema');
+    this.notificationService.showInfo('You have logged out');
     this.router.navigate(['/login']);
   }
 }

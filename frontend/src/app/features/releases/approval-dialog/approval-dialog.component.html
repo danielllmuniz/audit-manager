@@ -1,10 +1,10 @@
 <h2 mat-dialog-title>
   @if (isApproval) {
     <mat-icon color="primary" class="title-icon">check_circle</mat-icon>
-    <span>Aprovar Release</span>
+    <span>Approve Release</span>
   } @else {
     <mat-icon color="warn" class="title-icon">cancel</mat-icon>
-    <span>Rejeitar Release</span>
+    <span>Reject Release</span>
   }
 </h2>
 
@@ -17,15 +17,15 @@
           <span class="value">{{ release.application_name }}</span>
         </div>
         <div class="info-row">
-          <span class="label">Versão:</span>
+          <span class="label">Version:</span>
           <span class="value">{{ release.version }}</span>
         </div>
         <div class="info-row">
-          <span class="label">Ambiente:</span>
+          <span class="label">Environment:</span>
           <mat-chip class="env-chip">{{ release.env }}</mat-chip>
         </div>
         <div class="info-row">
-          <span class="label">Status Atual:</span>
+          <span class="label">Current Status:</span>
           <mat-chip [class]="'status-chip status-' + getStatusClass()">
             {{ getStatusLabel() }}
           </mat-chip>
@@ -36,15 +36,15 @@
 
   <form [formGroup]="approvalForm" class="approval-form">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Notas / Comentários</mat-label>
-      <textarea 
-        matInput 
+      <mat-label>Notes / Comments</mat-label>
+      <textarea
+        matInput
         formControlName="notes"
         rows="4"
-        [placeholder]="isApproval ? 'Adicione comentários sobre a aprovação...' : 'Explique o motivo da rejeição...'">
+        [placeholder]="isApproval ? 'Add comments about the approval...' : 'Explain the reason for rejection...'">
       </textarea>
       <mat-icon matPrefix>comment</mat-icon>
-      <mat-hint>{{ approvalForm.get('notes')?.value?.length || 0 }} / 500 caracteres</mat-hint>
+      <mat-hint>{{ approvalForm.get('notes')?.value?.length || 0 }} / 500 characters</mat-hint>
     </mat-form-field>
 
     @if (!isApproval) {
@@ -53,8 +53,8 @@
           <div class="warning-section">
             <mat-icon color="warn">warning</mat-icon>
             <div class="warning-text">
-              <strong>Atenção!</strong>
-              <p>Ao rejeitar este release, o processo será encerrado e será necessário criar um novo release.</p>
+              <strong>Warning!</strong>
+              <p>By rejecting this release, the process will be terminated and a new release will need to be created.</p>
             </div>
           </div>
         </mat-card-content>
@@ -64,27 +64,27 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button 
-    mat-button 
+  <button
+    mat-button
     mat-dialog-close
     [disabled]="saving">
-    Cancelar
+    Cancel
   </button>
-  <button 
-    mat-raised-button 
+  <button
+    mat-raised-button
     [color]="isApproval ? 'primary' : 'warn'"
     (click)="onSubmit()"
     [disabled]="saving">
     @if (saving) {
       <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-      <span>Processando...</span>
+      <span>Processing...</span>
     } @else {
       @if (isApproval) {
         <mat-icon>check_circle</mat-icon>
-        <span>Aprovar</span>
+        <span>Approve</span>
       } @else {
         <mat-icon>cancel</mat-icon>
-        <span>Rejeitar</span>
+        <span>Reject</span>
       }
     }
   </button>

@@ -14,32 +14,32 @@ export interface EnvironmentConfig {
 
 export const STATUS_CONFIG: Record<ReleaseStatus, StatusConfig> = {
   [ReleaseStatus.CREATED]: {
-    label: 'Criado',
+    label: 'Created',
     color: 'primary',
     icon: 'schedule',
   },
   [ReleaseStatus.PENDING_PREPROD]: {
-    label: 'Aguardando PRE-PROD',
+    label: 'Pending PRE-PROD',
     color: 'accent',
     icon: 'pending',
   },
   [ReleaseStatus.PENDING_PROD]: {
-    label: 'Aguardando PROD',
+    label: 'Pending PROD',
     color: 'accent',
     icon: 'pending',
   },
   [ReleaseStatus.APPROVED_PREPROD]: {
-    label: 'Aprovado PRE-PROD',
+    label: 'Approved PRE-PROD',
     color: 'primary',
     icon: 'check_circle',
   },
   [ReleaseStatus.APPROVED_PROD]: {
-    label: 'Aprovado PROD',
+    label: 'Approved PROD',
     color: 'primary',
     icon: 'check_circle',
   },
   [ReleaseStatus.REJECTED]: {
-    label: 'Rejeitado',
+    label: 'Rejected',
     color: 'warn',
     icon: 'cancel',
   },

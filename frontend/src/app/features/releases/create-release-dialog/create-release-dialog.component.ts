@@ -68,12 +68,12 @@ export class CreateReleaseDialogComponent implements OnInit {
     this.releaseService.createRelease(request).subscribe({
       next: (release) => {
         this.notificationService.showSuccess(
-          `Release ${release.version} criado com sucesso! Status: ${release.status}`
+          `Release ${release.version} created successfully! Status: ${release.status}`
         );
         this.dialogRef.close(true);
       },
       error: (error) => {
-        console.error('Erro ao criar release:', error);
+        console.error('Error creating release:', error);
         this.saving = false;
       },
     });

@@ -105,6 +105,7 @@
 
 .content-wrapper {
   padding: 24px;
+  width: 1200px;
 }
 
 @media (max-width: 960px) {

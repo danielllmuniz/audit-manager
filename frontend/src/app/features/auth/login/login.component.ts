@@ -49,12 +49,12 @@ export class LoginComponent {
         const userRole = response.data.attributes.user.role;
 
         this.notificationService.showSuccess(
-          `Bem-vindo, ${userName}! (${userRole})`
+          `Welcome, ${userName}! (${userRole})`
         );
         this.router.navigate(['/']);
       },
       error: (error) => {
-        console.error('Erro no login:', error);
+        console.error('Login error:', error);
         this.loading = false;
       },
       complete: () => {

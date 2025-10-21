@@ -56,12 +56,12 @@ export class CreateApplicationDialogComponent {
     this.applicationService.createApplication(request).subscribe({
       next: (application) => {
         this.notificationService.showSuccess(
-          `Application "${application.name}" criada com sucesso!`
+          `Application "${application.name}" created successfully!`
         );
         this.dialogRef.close(true);
       },
       error: (error) => {
-        console.error('Erro ao criar application:', error);
+        console.error('Error creating application:', error);
         this.saving = false;
       },
     });

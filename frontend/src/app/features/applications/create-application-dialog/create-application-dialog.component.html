@@ -1,73 +1,73 @@
-<h2 mat-dialog-title>Nova Application</h2>
+<h2 mat-dialog-title>New Application</h2>
 
 <mat-dialog-content>
   <form [formGroup]="applicationForm" class="application-form">
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Nome da Application</mat-label>
-      <input 
-        matInput 
+      <mat-label>Application Name</mat-label>
+      <input
+        matInput
         formControlName="name"
         placeholder="Ex: payment-service"
         required>
       <mat-icon matPrefix>apps</mat-icon>
       @if (applicationForm.get('name')?.hasError('required') && applicationForm.get('name')?.touched) {
-        <mat-error>Nome é obrigatório</mat-error>
+        <mat-error>Name is required</mat-error>
       }
       @if (applicationForm.get('name')?.hasError('minlength')) {
-        <mat-error>Nome deve ter no mínimo 3 caracteres</mat-error>
+        <mat-error>Name must have at least 3 characters</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Time Responsável</mat-label>
-      <input 
-        matInput 
+      <mat-label>Owner Team</mat-label>
+      <input
+        matInput
         formControlName="ownerTeam"
-        placeholder="Ex: Team Backend"
+        placeholder="Ex: Backend Team"
         required>
       <mat-icon matPrefix>group</mat-icon>
       @if (applicationForm.get('ownerTeam')?.hasError('required') && applicationForm.get('ownerTeam')?.touched) {
-        <mat-error>Time responsável é obrigatório</mat-error>
+        <mat-error>Owner team is required</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      <mat-label>URL do Repositório</mat-label>
-      <input 
-        matInput 
+      <mat-label>Repository URL</mat-label>
+      <input
+        matInput
         formControlName="repoUrl"
         placeholder="Ex: https://github.com/company/repo"
         required>
       <mat-icon matPrefix>link</mat-icon>
       @if (applicationForm.get('repoUrl')?.hasError('required') && applicationForm.get('repoUrl')?.touched) {
-        <mat-error>URL do repositório é obrigatória</mat-error>
+        <mat-error>Repository URL is required</mat-error>
       }
       @if (applicationForm.get('repoUrl')?.hasError('pattern')) {
-        <mat-error>URL inválida</mat-error>
+        <mat-error>Invalid URL</mat-error>
       }
     </mat-form-field>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button 
-    mat-button 
+  <button
+    mat-button
     mat-dialog-close
     [disabled]="saving">
-    Cancelar
+    Cancel
   </button>
-  <button 
-    mat-raised-button 
+  <button
+    mat-raised-button
     color="primary"
     (click)="onSubmit()"
     [disabled]="applicationForm.invalid || saving">
     @if (saving) {
       <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
-      <span>Criando...</span>
+      <span>Creating...</span>
     } @else {
       <ng-container>
         <mat-icon>add</mat-icon>
-        <span>Criar Application</span>
+        <span>Create Application</span>
       </ng-container>
     }
   </button>
