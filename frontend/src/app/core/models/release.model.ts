@@ -1,4 +1,5 @@
 import { Environment, ReleaseStatus } from './enums';
+import { Approval } from './approval.model';
 
 export interface Release {
   release_id?: number;
@@ -10,7 +11,9 @@ export interface Release {
   created_at?: string;
   deployed_at?: string;
   logs?: string;
+  deployment_logs?: string;
   application_name?: string;
+  approvals?: Approval[];
 
   id?: number;
   releaseId?: number;

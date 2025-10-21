@@ -1,0 +1,176 @@
+<div class="detail-container">
+  @if (loading) {
+    <div class="loading-container">
+      <mat-spinner></mat-spinner>
+      <p>Loading release details...</p>
+    </div>
+  } @else if (release) {
+    <div class="header">
+      <button mat-icon-button (click)="goBack()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <div class="title-section">
+        <h1>Release {{ release.version }}</h1>
+        <p class="subtitle">Release Details & Timeline</p>
+      </div>
+    </div>
+
+    <!-- Release Information -->
+    <mat-card class="info-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>info</mat-icon>
+          Release Information
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Release ID</label>
+            <span>#{{ release.id || release.release_id }}</span>
+          </div>
+          <div class="info-item">
+            <label>Application</label>
+            <span>{{ release.application_name || 'N/A' }}</span>
+          </div>
+          <div class="info-item">
+            <label>Version</label>
+            <mat-chip class="version-chip">{{ release.version }}</mat-chip>
+          </div>
+          <div class="info-item">
+            <label>Environment</label>
+            <mat-chip [class]="'env-chip env-' + release.env.toLowerCase()">
+              <mat-icon>{{ getEnvironmentIcon(release.env) }}</mat-icon>
+              {{ release.env }}
+            </mat-chip>
+          </div>
+          <div class="info-item">
+            <label>Status</label>
+            <mat-chip [class]="'status-chip status-' + getStatusClass(release.status)">
+              <mat-icon>{{ getStatusIcon(release.status) }}</mat-icon>
+              {{ getStatusLabel(release.status) }}
+            </mat-chip>
+          </div>
+          <div class="info-item">
+            <label>Created At</label>
+            <span>{{ release.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          @if (release.deployed_at || release.deployedAt) {
+            <div class="info-item">
+              <label>Deployed At</label>
+              <span>{{ (release.deployed_at || release.deployedAt) | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+          }
+          <div class="info-item">
+            <label>Evidence</label>
+            @if (release.evidence_url || release.evidenceUrl) {
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="downloadEvidence(release)">
+                <mat-icon>download</mat-icon>
+                Download Evidence
+              </button>
+            } @else {
+              <span class="no-evidence">No evidence</span>
+            }
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Approvals Section -->
+    @if (approvals && approvals.length > 0) {
+      <mat-card class="approvals-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>how_to_reg</mat-icon>
+            Approvals ({{ approvals.length }})
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="approvals-list">
+            @for (approval of approvals; track approval.id) {
+              <div class="approval-item" [class.rejected]="approval.outcome === 'REJECTED'">
+                <div class="approval-header">
+                  <mat-icon [class.approved]="approval.outcome === 'APPROVED'"
+                            [class.rejected]="approval.outcome === 'REJECTED'">
+                    {{ approval.outcome === 'APPROVED' ? 'check_circle' : 'cancel' }}
+                  </mat-icon>
+                  <div class="approval-info">
+                    <strong>{{ approval.approver_email || approval.approverEmail }}</strong>
+                    <span class="approval-outcome"
+                          [class.approved]="approval.outcome === 'APPROVED'"
+                          [class.rejected]="approval.outcome === 'REJECTED'">
+                      {{ approval.outcome }}
+                    </span>
+                  </div>
+                  <span class="approval-time">{{ approval.timestamp | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                @if (approval.notes) {
+                  <div class="approval-notes">
+                    <mat-icon>note</mat-icon>
+                    <p>{{ approval.notes }}</p>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- Timeline Section -->
+    <mat-card class="timeline-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>timeline</mat-icon>
+          Release Timeline
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (timelineEvents.length === 0) {
+          <div class="empty-state">
+            <mat-icon class="empty-icon">timeline</mat-icon>
+            <p>No timeline events available</p>
+          </div>
+        } @else {
+          <div class="timeline">
+            @for (event of timelineEvents; track $index; let isLast = $last) {
+              <div class="timeline-item" [class]="event.type">
+                <div class="timeline-marker">
+                  <mat-icon>{{ event.icon }}</mat-icon>
+                </div>
+                @if (!isLast) {
+                  <div class="timeline-connector"></div>
+                }
+                <div class="timeline-content">
+                  <div class="timeline-header">
+                    <h3>{{ event.title }}</h3>
+                    <span class="timeline-time">{{ event.timestamp | date:'dd/MM/yyyy HH:mm' }}</span>
+                  </div>
+                  <p>{{ event.description }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Deployment Logs (if available) -->
+    @if (release.logs || release.deployment_logs) {
+      <mat-card class="logs-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>article</mat-icon>
+            Deployment Logs
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <pre class="logs-content">{{ release.logs || release.deployment_logs }}</pre>
+        </mat-card-content>
+      </mat-card>
+    }
+  }
+</div>

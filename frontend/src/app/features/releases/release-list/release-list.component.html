@@ -118,6 +118,15 @@
               <th mat-header-cell *matHeaderCellDef>Actions</th>
               <td mat-cell *matCellDef="let release">
                 <div class="action-buttons">
+                  <!-- View Details -->
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    [routerLink]="['/releases', release.id || release.release_id]"
+                    matTooltip="View Details">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+
                   <!-- Approve -->
                   @if (canApprove(release)) {
                     <button

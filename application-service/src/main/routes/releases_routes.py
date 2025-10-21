@@ -3,6 +3,7 @@ from src.views.http_types.http_request import HttpRequest
 
 from src.main.composer.release_creator_composer import release_creator_composer
 from src.main.composer.release_lister_composer import release_lister_composer
+from src.main.composer.release_get_composer import release_get_composer
 from src.main.composer.release_approver_composer import release_approver_composer
 from src.main.composer.release_disapprover_composer import release_disapprover_composer
 from src.main.composer.release_promoter_composer import release_promoter_composer
@@ -31,6 +32,21 @@ def list_releases():
             query=dict(request.args)
         )
         view = release_lister_composer()
+
+        http_response = view.handle(http_request)
+        return jsonify(http_response.body), http_response.status_code
+    except Exception as e:
+        http_response = handle_errors(e)
+        return jsonify(http_response.body), http_response.status_code
+
+@release_route_bp.route('/releases/<int:release_id>', methods=['GET'])
+def get_release(release_id):
+    try:
+        http_request = HttpRequest(
+            param={"release_id": release_id},
+            headers=dict(request.headers)
+        )
+        view = release_get_composer()
 
         http_response = view.handle(http_request)
         return jsonify(http_response.body), http_response.status_code

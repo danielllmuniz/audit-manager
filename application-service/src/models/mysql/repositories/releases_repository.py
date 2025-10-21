@@ -50,7 +50,10 @@ class ReleasesRepository(ReleaseRepositoryInterface):
                 release = (
                     database.session
                         .query(ReleasesTable)
-                        .options(joinedload(ReleasesTable.application))
+                        .options(
+                            joinedload(ReleasesTable.application),
+                            joinedload(ReleasesTable.approvals)
+                        )
                         .filter(ReleasesTable.id == release_id)
                         .one()
                 )

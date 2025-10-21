@@ -4,6 +4,7 @@ import { ApplicationDetailComponent } from './features/applications/application-
 import { ApplicationListComponent } from './features/applications/application-list/application-list.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { ReleaseListComponent } from './features/releases/release-list/release-list.component';
+import { ReleaseDetailComponent } from './features/releases/release-detail/release-detail.component';
 import { LayoutComponent } from './shared/layout/layout.component';
 
 export const routes: Routes = [
@@ -32,6 +33,10 @@ export const routes: Routes = [
       {
         path: 'releases',
         component: ReleaseListComponent,
+      },
+      {
+        path: 'releases/:id',
+        component: ReleaseDetailComponent,
       },
     ],
   },

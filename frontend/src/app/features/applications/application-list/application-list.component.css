@@ -156,7 +156,7 @@
   }
 }
 
-// Responsivo
+/* Responsivo */
 @media (max-width: 960px) {
   .header {
     flex-direction: column;

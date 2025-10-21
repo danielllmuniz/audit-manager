@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { RouterModule } from '@angular/router';
 import { Application, Release } from '../../../core/models';
 import {
   Environment,
@@ -23,7 +24,7 @@ import { CreateReleaseDialogComponent } from '../create-release-dialog/create-re
 @Component({
   selector: 'app-release-list',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, RouterModule],
   templateUrl: './release-list.component.html',
   styleUrl: './release-list.component.css',
 })
