@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { environment } from '../../../../environments/environment';
 import { Application, Release } from '../../../core/models';
 import {
   Environment,
@@ -216,12 +215,25 @@ export class ReleaseListComponent implements OnInit {
     return this.authService.hasRole('DEV');
   }
 
-  getEvidenceUrl(evidenceUrl: string): string {
-    // Se já é uma URL completa, retorna como está
-    if (evidenceUrl.startsWith('http')) {
-      return evidenceUrl;
-    }
-    // Caso contrário, constrói a URL completa
-    return `${environment.apiUrl}/api/v1${evidenceUrl}`;
+  downloadEvidence(release: Release): void {
+    const evidenceUrl = release.evidence_url || release.evidenceUrl;
+    if (!evidenceUrl) return;
+
+    this.releaseService.downloadEvidence(evidenceUrl).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `evidence_${release.version}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading evidence:', error);
+        this.notificationService.showError('Error downloading evidence file');
+      },
+    });
   }
 }

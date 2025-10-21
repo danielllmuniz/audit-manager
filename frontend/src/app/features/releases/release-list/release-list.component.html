@@ -100,15 +100,13 @@
               <th mat-header-cell *matHeaderCellDef>Evidence</th>
               <td mat-cell *matCellDef="let release">
                 @if (release.evidence_url || release.evidenceUrl) {
-                  <a
-                    [href]="getEvidenceUrl(release.evidence_url || release.evidenceUrl)"
-                    target="_blank"
+                  <button
                     mat-button
                     color="primary"
-                    download>
+                    (click)="downloadEvidence(release)">
                     <mat-icon>download</mat-icon>
                     Download
-                  </a>
+                  </button>
                 } @else {
                   <span class="no-evidence">No evidence</span>
                 }

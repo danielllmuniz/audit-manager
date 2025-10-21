@@ -4,6 +4,8 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Application, Release } from '../../../core/models';
 import { Environment, ReleaseStatus } from '../../../core/models/enums';
 import { ApplicationService } from '../../../core/services/application.service';
+import { ReleaseService } from '../../../core/services/release.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { MaterialModule } from '../../../shared/material.module';
 import {
   getEnvironmentConfig,
@@ -33,7 +35,9 @@ export class ApplicationDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private applicationService: ApplicationService
+    private applicationService: ApplicationService,
+    private releaseService: ReleaseService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -86,5 +90,27 @@ export class ApplicationDetailComponent implements OnInit {
 
   getEnvironmentIcon(env: Environment): string {
     return getEnvironmentConfig(env).icon;
+  }
+
+  downloadEvidence(release: Release): void {
+    const evidenceUrl = release.evidence_url || release.evidenceUrl;
+    if (!evidenceUrl) return;
+
+    this.releaseService.downloadEvidence(evidenceUrl).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `evidence_${release.version}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading evidence:', error);
+        this.notificationService.showError('Error downloading evidence file');
+      },
+    });
   }
 }
