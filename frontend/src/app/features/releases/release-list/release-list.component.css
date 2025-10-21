@@ -1,6 +1,7 @@
 .releases-container {
-  max-width: 1600px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 .header {
@@ -261,6 +262,10 @@
 }
 
 @media (max-width: 600px) {
+  .releases-container {
+    padding: 0 16px;
+  }
+
   .releases-table {
     font-size: 12px;
 

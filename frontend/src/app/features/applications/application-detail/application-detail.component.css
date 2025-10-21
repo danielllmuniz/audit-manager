@@ -1,6 +1,7 @@
 .detail-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
 .header {
@@ -239,5 +240,11 @@
 @media (max-width: 960px) {
   .info-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .detail-container {
+    padding: 0 16px;
   }
 }
