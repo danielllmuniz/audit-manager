@@ -100,6 +100,21 @@
   td {
     padding: 16px;
 
+    .app-name-link {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #3f51b5;
+        text-decoration: underline;
+      }
+
+      strong {
+        font-weight: 500;
+      }
+    }
+
     strong {
       font-weight: 500;
       color: #333;

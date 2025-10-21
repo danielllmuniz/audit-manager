@@ -71,7 +71,7 @@ Authorization: Bearer <token>
 
 ```bash
 # Create application (DEV only)
-POST /api/v1/applications
+POST /api/v1/audit/applications
 Authorization: Bearer <dev-token>
 Content-Type: application/json
 
@@ -82,11 +82,15 @@ Content-Type: application/json
 }
 
 # List applications (DEV, APPROVER, DEVOPS)
-GET /api/v1/applications
+GET /api/v1/audit/applications
+Authorization: Bearer <token>
+
+# Get application by ID (DEV, APPROVER, DEVOPS)
+GET /api/v1/audit/applications/{id}
 Authorization: Bearer <token>
 
 # Create release (DEV only)
-POST /api/v1/releases
+POST /api/v1/audit/releases
 Authorization: Bearer <dev-token>
 Content-Type: application/json
 
@@ -99,7 +103,7 @@ Content-Type: application/json
 # You can optionally specify: "env": "DEV" | "PREPROD" | "PROD"
 
 # List releases (DEV, APPROVER, DEVOPS)
-GET /api/v1/releases
+GET /api/v1/audit/releases
 Authorization: Bearer <token>
 
 Response:
@@ -121,7 +125,7 @@ Response:
 }
 
 # Approve release (APPROVER only)
-POST /api/v1/releases/{id}/approve
+POST /api/v1/audit/releases/{id}/approve
 Authorization: Bearer <approver-token>
 Content-Type: application/json
 
@@ -130,7 +134,7 @@ Content-Type: application/json
 }
 
 # Promote release (DEVOPS only)
-POST /api/v1/releases/{id}/promote
+POST /api/v1/audit/releases/{id}/promote
 Authorization: Bearer <devops-token>
 ```
 

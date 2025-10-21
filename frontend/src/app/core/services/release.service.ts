@@ -29,7 +29,7 @@ interface ReleaseResponse {
   providedIn: 'root',
 })
 export class ReleaseService {
-  private apiUrl = `${environment.apiUrl}/api/v1/releases`;
+  private apiUrl = `${environment.apiUrl}/api/v1/audit/releases`;
 
   constructor(private http: HttpClient) {}
 

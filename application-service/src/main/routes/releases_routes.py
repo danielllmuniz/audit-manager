@@ -9,7 +9,7 @@ from src.main.composer.release_promoter_composer import release_promoter_compose
 
 from src.errors.error_handler import handle_errors
 
-release_route_bp = Blueprint('releases_routes', __name__)
+release_route_bp = Blueprint('releases_routes', __name__, url_prefix='/audit')
 
 @release_route_bp.route('/releases', methods=['POST'])
 def create_release():

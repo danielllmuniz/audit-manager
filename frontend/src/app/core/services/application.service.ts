@@ -16,7 +16,7 @@ interface ApplicationResponse {
   providedIn: 'root',
 })
 export class ApplicationService {
-  private apiUrl = `${environment.apiUrl}/api/v1/applications`;
+  private apiUrl = `${environment.apiUrl}/api/v1/audit/applications`;
 
   constructor(private http: HttpClient) {
     console.log('ApplicationService initialized. API URL:', this.apiUrl);

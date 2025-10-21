@@ -52,7 +52,9 @@
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef>Nome</th>
               <td mat-cell *matCellDef="let app">
-                <strong>{{ app.name }}</strong>
+                <a [routerLink]="['/applications', app.id]" class="app-name-link">
+                  <strong>{{ app.name }}</strong>
+                </a>
               </td>
             </ng-container>
 
