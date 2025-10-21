@@ -26,7 +26,10 @@ def create_release():
 @release_route_bp.route('/releases', methods=['GET'])
 def list_releases():
     try:
-        http_request = HttpRequest(headers=dict(request.headers))
+        http_request = HttpRequest(
+            headers=dict(request.headers),
+            query=dict(request.args)
+        )
         view = release_lister_composer()
 
         http_response = view.handle(http_request)

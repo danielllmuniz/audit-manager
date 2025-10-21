@@ -76,6 +76,7 @@ class ReleasesRepository(ReleaseRepositoryInterface):
                 releases = (
                     database.session
                         .query(ReleasesTable)
+                        .options(joinedload(ReleasesTable.application))
                         .filter(ReleasesTable.application_id == application_id)
                         .all()
                 )
