@@ -28,7 +28,6 @@ export class ApplicationService {
 
     return this.http.get<ApplicationListResponse>(this.apiUrl).pipe(
       map((response) => {
-        // Extrair o array de dentro de 'data'
         const applications = response.data.map((app) =>
           this.mapApplication(app)
         );
@@ -71,7 +70,6 @@ export class ApplicationService {
     );
   }
 
-  // Método auxiliar para mapear os campos snake_case para camelCase
   private mapApplication(app: Application): Application {
     return {
       ...app,

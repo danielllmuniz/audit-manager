@@ -8,7 +8,6 @@ import {
   ReleaseStatus,
   UserRole,
 } from '../../../core/models/enums';
-import { ApplicationService } from '../../../core/services/application.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ReleaseService } from '../../../core/services/release.service';
@@ -45,7 +44,6 @@ export class ReleaseListComponent implements OnInit {
 
   constructor(
     private releaseService: ReleaseService,
-    private applicationService: ApplicationService,
     private authService: AuthService,
     private notificationService: NotificationService,
     private dialog: MatDialog,
@@ -60,19 +58,7 @@ export class ReleaseListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadApplications();
     this.loadReleases();
-  }
-
-  loadApplications(): void {
-    this.applicationService.getApplications().subscribe({
-      next: (data) => {
-        this.applications = data;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar applications:', error);
-      },
-    });
   }
 
   loadReleases(): void {
