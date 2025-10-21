@@ -8,10 +8,11 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: center;
   padding: 0;
+  background: linear-gradient(135deg, #5B7FFF 0%, #6B8FFF 100%) !important;
 
   .toolbar-content {
     display: flex;
@@ -61,15 +62,16 @@
 
 .sidenav-container {
   flex: 1;
-  background-color: #f5f5f5;
+  background-color: var(--gray-50);
 }
 
 .sidenav {
   width: 260px;
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid var(--gray-200);
   border-radius: 0px;
   background-color: white;
   margin-left: max(0px, calc((100vw - 1540px) / 2));
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
   mat-nav-list {
     padding-top: 16px;
 
@@ -84,24 +86,26 @@
 
     a {
       margin: 4px 8px;
-      border-radius: 8px;
+      border-radius: 10px;
       transition: all 0.2s ease;
+      color: var(--gray-700);
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.04);
+        background-color: var(--gray-100);
       }
 
       &.active-link {
-        background-color: rgba(63, 81, 181, 0.12);
-        color: #3f51b5;
+        background-color: var(--primary-light);
+        color: var(--primary-color);
+        font-weight: 500;
 
         mat-icon {
-          color: #3f51b5;
+          color: var(--primary-color);
         }
       }
 
       mat-icon {
-        color: rgba(0, 0, 0, 0.54);
+        color: var(--gray-500);
       }
     }
 
