@@ -118,8 +118,15 @@ class ReleasePromoterController:
         }
 
         if deployment_success:
-            update_data["env"] = self.__determine_target_environment(release.env)
+            target_env = self.__determine_target_environment(release.env)
+            update_data["env"] = target_env
             update_data["deployed_at"] = datetime.now(timezone.utc)
+
+            # Save specific deployment timestamps based on target environment
+            if target_env == EnvironmentEnum.PREPROD:
+                update_data["deployed_preprod_at"] = datetime.now(timezone.utc)
+            elif target_env == EnvironmentEnum.PROD:
+                update_data["deployed_prod_at"] = datetime.now(timezone.utc)
 
         release_updated = self.__release_repository.update_release(release_id, update_data)
         return release_updated
@@ -136,7 +143,9 @@ class ReleasePromoterController:
                 "evidence_url": release_updated.evidence_url,
                 "logs": release_updated.deployment_logs,
                 "created_at": release_updated.created_at.isoformat(),
-                "deployed_at": release_updated.deployed_at.isoformat() if release_updated.deployed_at else None
+                "deployed_at": release_updated.deployed_at.isoformat() if release_updated.deployed_at else None,
+                "deployed_preprod_at": release_updated.deployed_preprod_at.isoformat() if release_updated.deployed_preprod_at else None,
+                "deployed_prod_at": release_updated.deployed_prod_at.isoformat() if release_updated.deployed_prod_at else None
             }
         }
         return response

@@ -30,6 +30,8 @@ class ReleasesTable(Base):
     deployment_logs = Column(Text, nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
     deployed_at = Column(DateTime, nullable=True)
+    deployed_preprod_at = Column(DateTime, nullable=True)
+    deployed_prod_at = Column(DateTime, nullable=True)
 
     application = relationship("ApplicationsTable", back_populates="releases")
     approvals = relationship("ApprovalsTable", back_populates="release")

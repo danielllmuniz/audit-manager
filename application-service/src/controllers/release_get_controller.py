@@ -46,6 +46,8 @@ class ReleaseGetController:
                 "logs": release.deployment_logs,
                 "created_at": release.created_at.isoformat(),
                 "deployed_at": release.deployed_at.isoformat() if release.deployed_at else None,
+                "deployed_preprod_at": release.deployed_preprod_at.isoformat() if release.deployed_preprod_at else None,
+                "deployed_prod_at": release.deployed_prod_at.isoformat() if release.deployed_prod_at else None,
                 "approvals": approvals
             }
         }

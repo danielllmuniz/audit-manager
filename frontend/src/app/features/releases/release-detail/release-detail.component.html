@@ -55,10 +55,16 @@
             <label>Created At</label>
             <span>{{ release.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
           </div>
-          @if (release.deployed_at || release.deployedAt) {
+          @if (release.deployed_preprod_at || release.deployedPreprodAt) {
             <div class="info-item">
-              <label>Deployed At</label>
-              <span>{{ (release.deployed_at || release.deployedAt) | date:'dd/MM/yyyy HH:mm' }}</span>
+              <label>Deployed to PREPROD</label>
+              <span>{{ (release.deployed_preprod_at || release.deployedPreprodAt) | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+          }
+          @if (release.deployed_prod_at || release.deployedProdAt) {
+            <div class="info-item">
+              <label>Deployed to PROD</label>
+              <span>{{ (release.deployed_prod_at || release.deployedProdAt) | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
           }
           <div class="info-item">

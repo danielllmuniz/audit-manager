@@ -10,6 +10,8 @@ export interface Release {
   evidence_url?: string;
   created_at?: string;
   deployed_at?: string;
+  deployed_preprod_at?: string;
+  deployed_prod_at?: string;
   logs?: string;
   deployment_logs?: string;
   application_name?: string;
@@ -21,6 +23,8 @@ export interface Release {
   evidenceUrl?: string;
   createdAt?: Date;
   deployedAt?: Date;
+  deployedPreprodAt?: Date;
+  deployedProdAt?: Date;
   applicationName?: string;
 }
 

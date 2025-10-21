@@ -124,6 +124,12 @@ export class ReleaseService {
       deployedAt: release.deployed_at
         ? new Date(release.deployed_at)
         : undefined,
+      deployedPreprodAt: release.deployed_preprod_at
+        ? new Date(release.deployed_preprod_at)
+        : undefined,
+      deployedProdAt: release.deployed_prod_at
+        ? new Date(release.deployed_prod_at)
+        : undefined,
       applicationName: release.application_name,
     };
   }

@@ -104,13 +104,25 @@ export class ReleaseDetailComponent implements OnInit {
       });
     }
 
-    // Deployed event
-    const deployedDate = this.release.deployed_at || this.release.deployedAt;
-    if (deployedDate) {
+    // Deployed to PREPROD event
+    const deployedPreprodDate = this.release.deployed_preprod_at || this.release.deployedPreprodAt;
+    if (deployedPreprodDate) {
       this.timelineEvents.push({
-        title: 'Release Deployed',
-        description: `Successfully deployed to ${this.release.env} environment`,
-        timestamp: new Date(deployedDate),
+        title: 'Deployed to PREPROD',
+        description: 'Successfully deployed to PREPROD environment',
+        timestamp: new Date(deployedPreprodDate),
+        icon: 'rocket_launch',
+        type: 'deployed',
+      });
+    }
+
+    // Deployed to PROD event
+    const deployedProdDate = this.release.deployed_prod_at || this.release.deployedProdAt;
+    if (deployedProdDate) {
+      this.timelineEvents.push({
+        title: 'Deployed to PROD',
+        description: 'Successfully deployed to PRODUCTION environment',
+        timestamp: new Date(deployedProdDate),
         icon: 'rocket_launch',
         type: 'deployed',
       });
