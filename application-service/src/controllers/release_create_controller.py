@@ -54,7 +54,8 @@ class ReleaseCreatorController:
     def __simulate_validation(self, version: str) -> Tuple[bool, str]:
         validation_passed = random.random() < 0.8
         evidence_id = str(uuid.uuid4())
-        timestamp = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(timezone.utc)
+        timestamp = now.isoformat()
 
         # Create uploads directory - use absolute path
         uploads_dir = '/app/uploads'
@@ -64,69 +65,50 @@ class ReleaseCreatorController:
         filename = f"evidence_{evidence_id}.txt"
         filepath = os.path.join(uploads_dir, filename)
 
-        # Build evidence content
+        # Build evidence content with timestamp-based logs
         if validation_passed:
-            test_results = """
-1. Security Checks ............................ PASSED (Score: 95/100)
-   - No critical vulnerabilities found
-   - All dependencies up to date
-
-2. Code Quality Analysis ...................... PASSED (Score: 85/100)
-   - Code meets quality standards
-   - No major code smells detected
-
-3. Unit Tests ................................. PASSED (150/150)
-   - All unit tests passed successfully
-   - Code coverage: 92%
-
-4. Integration Tests .......................... PASSED (50/50)
-   - All integration tests passed
-   - No regression detected
+            evidence_content = f"""[{timestamp}] Starting validation for version {version}...
+[{timestamp}] Evidence ID: {evidence_id}
+[{timestamp}] Running security checks...
+[{timestamp}] Security Checks: PASSED (Score: 95/100)
+[{timestamp}]   - No critical vulnerabilities found
+[{timestamp}]   - All dependencies up to date
+[{timestamp}] Running code quality analysis...
+[{timestamp}] Code Quality Analysis: PASSED (Score: 85/100)
+[{timestamp}]   - Code meets quality standards
+[{timestamp}]   - No major code smells detected
+[{timestamp}] Running unit tests...
+[{timestamp}] Unit Tests: PASSED (150/150)
+[{timestamp}]   - All unit tests passed successfully
+[{timestamp}]   - Code coverage: 92%
+[{timestamp}] Running integration tests...
+[{timestamp}] Integration Tests: PASSED (50/50)
+[{timestamp}]   - All integration tests passed
+[{timestamp}]   - No regression detected
+[{timestamp}] ✓ ALL VALIDATIONS PASSED - Release approved for PREPROD
+[{timestamp}] Validation completed successfully!
 """
-            conclusion = "✓ ALL VALIDATIONS PASSED - Release approved for PREPROD"
         else:
-            test_results = """
-1. Security Checks ............................ PASSED (Score: 95/100)
-   - No critical vulnerabilities found
-
-2. Code Quality Analysis ...................... FAILED (Score: 45/100)
-   ✗ Code quality below threshold
-   ✗ Found 15 critical issues
-   ✗ Technical debt too high
-
-3. Unit Tests ................................. FAILED (135/150)
-   ✗ 15 tests failed
-   ✗ Code coverage: 68% (below 80% threshold)
-
-4. Integration Tests .......................... FAILED (42/50)
-   ✗ 8 integration tests failed
-   ✗ Regression detected in API endpoints
-"""
-            conclusion = "✗ VALIDATION FAILED - Release REJECTED"
-
-        evidence_content = f"""
-=================================================================
-                 RELEASE VALIDATION EVIDENCE
-=================================================================
-
-Evidence ID: {evidence_id}
-Version: {version}
-Validation Date: {timestamp}
-Overall Status: {'PASSED' if validation_passed else 'FAILED'}
-
------------------------------------------------------------------
-                    VALIDATION RESULTS
------------------------------------------------------------------
-{test_results}
------------------------------------------------------------------
-                      CONCLUSION
------------------------------------------------------------------
-
-{conclusion}
-
-=================================================================
-              This is an automated validation report
-=================================================================
+            evidence_content = f"""[{timestamp}] Starting validation for version {version}...
+[{timestamp}] Evidence ID: {evidence_id}
+[{timestamp}] Running security checks...
+[{timestamp}] Security Checks: PASSED (Score: 95/100)
+[{timestamp}]   - No critical vulnerabilities found
+[{timestamp}] Running code quality analysis...
+[{timestamp}] Code Quality Analysis: FAILED (Score: 45/100)
+[{timestamp}]   ✗ Code quality below threshold
+[{timestamp}]   ✗ Found 15 critical issues
+[{timestamp}]   ✗ Technical debt too high
+[{timestamp}] Running unit tests...
+[{timestamp}] Unit Tests: FAILED (135/150)
+[{timestamp}]   ✗ 15 tests failed
+[{timestamp}]   ✗ Code coverage: 68% (below 80% threshold)
+[{timestamp}] Running integration tests...
+[{timestamp}] Integration Tests: FAILED (42/50)
+[{timestamp}]   ✗ 8 integration tests failed
+[{timestamp}]   ✗ Regression detected in API endpoints
+[{timestamp}] ✗ VALIDATION FAILED - Release REJECTED
+[{timestamp}] Validation completed with errors!
 """
 
         with open(filepath, 'w', encoding='utf-8') as f:

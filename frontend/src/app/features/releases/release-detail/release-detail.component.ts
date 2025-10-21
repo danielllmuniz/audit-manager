@@ -30,7 +30,9 @@ export class ReleaseDetailComponent implements OnInit {
   release: Release | null = null;
   approvals: Approval[] = [];
   timelineEvents: TimelineEvent[] = [];
+  evidenceContent: string = '';
   loading = false;
+  loadingEvidence = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,12 +56,32 @@ export class ReleaseDetailComponent implements OnInit {
         this.approvals = data.approvals || [];
         this.buildTimeline();
         this.loading = false;
+
+        // Load evidence content if available
+        const evidenceUrl = data.evidence_url || data.evidenceUrl;
+        if (evidenceUrl) {
+          this.loadEvidenceContent(evidenceUrl);
+        }
       },
       error: (error) => {
         console.error('Error loading release:', error);
         this.notificationService.showError('Error loading release details');
         this.loading = false;
         this.router.navigate(['/releases']);
+      },
+    });
+  }
+
+  loadEvidenceContent(evidenceUrl: string): void {
+    this.loadingEvidence = true;
+    this.releaseService.getEvidenceContent(evidenceUrl).subscribe({
+      next: (content) => {
+        this.evidenceContent = content;
+        this.loadingEvidence = false;
+      },
+      error: (error) => {
+        console.error('Error loading evidence content:', error);
+        this.loadingEvidence = false;
       },
     });
   }

@@ -67,23 +67,11 @@
               <span>{{ (release.deployed_prod_at || release.deployedProdAt) | date:'dd/MM/yyyy HH:mm' }}</span>
             </div>
           }
-          <div class="info-item">
-            <label>Evidence</label>
-            @if (release.evidence_url || release.evidenceUrl) {
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="downloadEvidence(release)">
-                <mat-icon>download</mat-icon>
-                Download Evidence
-              </button>
-            } @else {
-              <span class="no-evidence">No evidence</span>
-            }
-          </div>
         </div>
       </mat-card-content>
     </mat-card>
+
+
 
     <!-- Approvals Section -->
     @if (approvals && approvals.length > 0) {
@@ -175,6 +163,39 @@
         </mat-card-header>
         <mat-card-content>
           <pre class="logs-content">{{ release.logs || release.deployment_logs }}</pre>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    @if (release.evidence_url || release.evidenceUrl) {
+      <mat-card class="evidence-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>description</mat-icon>
+            Validation Evidence
+          </mat-card-title>
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="downloadEvidence(release)"
+            matTooltip="Download Evidence">
+            <mat-icon>download</mat-icon>
+          </button>
+        </mat-card-header>
+        <mat-card-content >
+          @if (loadingEvidence) {
+            <div class="loading-evidence">
+              <mat-spinner diameter="40"></mat-spinner>
+              <p>Loading evidence...</p>
+            </div>
+          } @else if (evidenceContent) {
+            <pre class="logs-content">{{ evidenceContent }}</pre>
+          } @else {
+            <div class="empty-state">
+              <mat-icon class="empty-icon">description</mat-icon>
+              <p>No evidence content available</p>
+            </div>
+          }
         </mat-card-content>
       </mat-card>
     }

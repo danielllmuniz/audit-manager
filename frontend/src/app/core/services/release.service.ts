@@ -113,6 +113,16 @@ export class ReleaseService {
     });
   }
 
+  getEvidenceContent(evidenceUrl: string): Observable<string> {
+    const url = evidenceUrl.startsWith('http')
+      ? evidenceUrl
+      : `${environment.apiUrl}/api/v1${evidenceUrl}`;
+
+    return this.http.get(url, {
+      responseType: 'text'
+    });
+  }
+
   private mapRelease(release: Release): Release {
     return {
       ...release,
