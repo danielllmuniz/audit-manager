@@ -8,6 +8,7 @@ import {
   ReleaseStatus,
   UserRole,
 } from '../../../core/models/enums';
+import { ApplicationService } from '../../../core/services';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { ReleaseService } from '../../../core/services/release.service';
@@ -43,6 +44,7 @@ export class ReleaseListComponent implements OnInit {
   ];
 
   constructor(
+    private applicationService: ApplicationService,
     private releaseService: ReleaseService,
     private authService: AuthService,
     private notificationService: NotificationService,
@@ -59,8 +61,23 @@ export class ReleaseListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadReleases();
+
+    this.loadApplications();
   }
 
+  loadApplications(): void {
+    this.loading = true;
+    this.applicationService.getApplications().subscribe({
+      next: (data) => {
+        this.applications = data;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading applications:', error);
+        this.loading = false;
+      },
+    });
+  }
   loadReleases(): void {
     this.loading = true;
     const filters = this.filterForm.value;

@@ -44,7 +44,7 @@ export const STATUS_CONFIG: Record<ReleaseStatus, StatusConfig> = {
     icon: 'cancel',
   },
   [ReleaseStatus.DEPLOYED]: {
-    label: 'Implantado',
+    label: 'Deployed',
     color: 'accent',
     icon: 'cloud_done',
   },

@@ -3,6 +3,7 @@ from src.models.mysql.entities.releases import ReleasesTable, EnvironmentEnum, S
 from src.models.mysql.interfaces.release_repository import ReleaseRepositoryInterface
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload
+from sqlalchemy import desc
 
 
 class ReleasesRepository(ReleaseRepositoryInterface):
@@ -64,6 +65,7 @@ class ReleasesRepository(ReleaseRepositoryInterface):
                     database.session
                         .query(ReleasesTable)
                         .options(joinedload(ReleasesTable.application))
+                        .order_by(desc(ReleasesTable.created_at))
                         .all()
                 )
                 return releases
@@ -78,6 +80,7 @@ class ReleasesRepository(ReleaseRepositoryInterface):
                         .query(ReleasesTable)
                         .options(joinedload(ReleasesTable.application))
                         .filter(ReleasesTable.application_id == application_id)
+                        .order_by(desc(ReleasesTable.created_at))
                         .all()
                 )
                 return releases

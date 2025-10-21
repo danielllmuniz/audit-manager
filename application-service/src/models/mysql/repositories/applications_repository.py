@@ -3,6 +3,7 @@ from src.models.mysql.entities.applications import ApplicationsTable
 from src.models.mysql.interfaces.application_repository import ApplicationRepositoryInterface
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload
+from sqlalchemy import desc
 
 
 class ApplicationsRepository(ApplicationRepositoryInterface):
@@ -57,7 +58,12 @@ class ApplicationsRepository(ApplicationRepositoryInterface):
     def list_applications(self) -> List[ApplicationsTable]:
         with self.__db_connection as database:
             try:
-                applications = database.session.query(ApplicationsTable).all()
+                applications = (
+                    database.session
+                        .query(ApplicationsTable)
+                        .order_by(desc(ApplicationsTable.created_at))
+                        .all()
+                )
                 return applications
             except NoResultFound:
                 return []
