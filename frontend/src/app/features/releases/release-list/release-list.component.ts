@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { environment } from '../../../../environments/environment';
 import { Application, Release } from '../../../core/models';
 import {
   Environment,
@@ -213,5 +214,14 @@ export class ReleaseListComponent implements OnInit {
 
   canCreateReleases(): boolean {
     return this.authService.hasRole('DEV');
+  }
+
+  getEvidenceUrl(evidenceUrl: string): string {
+    // Se já é uma URL completa, retorna como está
+    if (evidenceUrl.startsWith('http')) {
+      return evidenceUrl;
+    }
+    // Caso contrário, constrói a URL completa
+    return `${environment.apiUrl}/api/v1${evidenceUrl}`;
   }
 }

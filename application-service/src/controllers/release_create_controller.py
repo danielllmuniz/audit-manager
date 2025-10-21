@@ -1,6 +1,7 @@
 from typing import Dict, Tuple
 import random
 import uuid
+import os
 from datetime import datetime, timezone
 from src.models.mysql.interfaces.release_repository import ReleaseRepositoryInterface
 from src.models.mysql.interfaces.application_repository import ApplicationRepositoryInterface
@@ -25,7 +26,7 @@ class ReleaseCreatorController:
         self.__validate_application_exists(application_id)
         env_enum = self.__validate_and_convert_env(env)
 
-        validation_passed, evidence_url, validation_logs = self.__simulate_validation(version)
+        validation_passed, evidence_url = self.__simulate_validation(version)
         initial_status = StatusEnum.PENDING_PREPROD if validation_passed else StatusEnum.REJECTED
 
         release_created = self.__insert_release_in_db(
@@ -34,7 +35,6 @@ class ReleaseCreatorController:
             env_enum,
             evidence_url,
             initial_status,
-            validation_logs
         )
         formated_response = self.__format_response(release_created)
         return formated_response
@@ -51,36 +51,92 @@ class ReleaseCreatorController:
             valid_envs = [e.value for e in EnvironmentEnum]
             raise HttpUnprocessableEntityError(f"Invalid environment '{env}'. Valid options: {valid_envs}")
 
-    def __simulate_validation(self, version: str) -> Tuple[bool, str, str]:
+    def __simulate_validation(self, version: str) -> Tuple[bool, str]:
         validation_passed = random.random() < 0.8
-
         evidence_id = str(uuid.uuid4())
-        evidence_url = f"https://evidence.example.com/releases/{evidence_id}"
-
         timestamp = datetime.now(timezone.utc).isoformat()
+
+        # Create uploads directory - use absolute path
+        uploads_dir = '/app/uploads'
+        os.makedirs(uploads_dir, exist_ok=True)
+
+        # Create evidence text file
+        filename = f"evidence_{evidence_id}.txt"
+        filepath = os.path.join(uploads_dir, filename)
+
+        # Build evidence content
         if validation_passed:
-            logs = f"""
-[{timestamp}] Starting automated validation for version {version}
-[{timestamp}] Running security checks... PASSED
-[{timestamp}] Running code quality analysis... PASSED
-[{timestamp}] Running unit tests... PASSED
-[{timestamp}] Running integration tests... PASSED
-[{timestamp}] All validations passed successfully
-[{timestamp}] Evidence stored at: {evidence_url}
-[{timestamp}] Release approved for PREPROD
+            test_results = """
+1. Security Checks ............................ PASSED (Score: 95/100)
+   - No critical vulnerabilities found
+   - All dependencies up to date
+
+2. Code Quality Analysis ...................... PASSED (Score: 85/100)
+   - Code meets quality standards
+   - No major code smells detected
+
+3. Unit Tests ................................. PASSED (150/150)
+   - All unit tests passed successfully
+   - Code coverage: 92%
+
+4. Integration Tests .......................... PASSED (50/50)
+   - All integration tests passed
+   - No regression detected
 """
+            conclusion = "✓ ALL VALIDATIONS PASSED - Release approved for PREPROD"
         else:
-            logs = f"""
-[{timestamp}] Starting automated validation for version {version}
-[{timestamp}] Running security checks... PASSED
-[{timestamp}] Running code quality analysis... FAILED
-[{timestamp}] ERROR: Code quality below threshold
-[{timestamp}] ERROR: Found 15 critical issues
-[{timestamp}] Validation failed
-[{timestamp}] Release REJECTED
+            test_results = """
+1. Security Checks ............................ PASSED (Score: 95/100)
+   - No critical vulnerabilities found
+
+2. Code Quality Analysis ...................... FAILED (Score: 45/100)
+   ✗ Code quality below threshold
+   ✗ Found 15 critical issues
+   ✗ Technical debt too high
+
+3. Unit Tests ................................. FAILED (135/150)
+   ✗ 15 tests failed
+   ✗ Code coverage: 68% (below 80% threshold)
+
+4. Integration Tests .......................... FAILED (42/50)
+   ✗ 8 integration tests failed
+   ✗ Regression detected in API endpoints
+"""
+            conclusion = "✗ VALIDATION FAILED - Release REJECTED"
+
+        evidence_content = f"""
+=================================================================
+                 RELEASE VALIDATION EVIDENCE
+=================================================================
+
+Evidence ID: {evidence_id}
+Version: {version}
+Validation Date: {timestamp}
+Overall Status: {'PASSED' if validation_passed else 'FAILED'}
+
+-----------------------------------------------------------------
+                    VALIDATION RESULTS
+-----------------------------------------------------------------
+{test_results}
+-----------------------------------------------------------------
+                      CONCLUSION
+-----------------------------------------------------------------
+
+{conclusion}
+
+=================================================================
+              This is an automated validation report
+=================================================================
 """
 
-        return validation_passed, evidence_url, logs
+        with open(filepath, 'w') as f:
+            f.write(evidence_content)
+
+        evidence_url = f"/audit/evidences/{filename}"
+
+
+
+        return validation_passed, evidence_url
 
     def __insert_release_in_db(
         self,
@@ -89,7 +145,6 @@ class ReleaseCreatorController:
         env: EnvironmentEnum,
         evidence_url: str,
         status: StatusEnum,
-        validation_logs: str
     ) -> ReleasesTable:
         release_created = self.__release_repository.create_release(
             application_id,
@@ -99,12 +154,8 @@ class ReleaseCreatorController:
             status
         )
 
-        release_updated = self.__release_repository.update_release(
-            release_created.id,
-            {"deployment_logs": validation_logs}
-        )
 
-        return release_updated
+        return release_created
 
     def __format_response(self, release_created: ReleasesTable) -> Dict:
         response = {

@@ -4,6 +4,7 @@ from src.models.mysql.settings.connection import db_connection_handler
 
 from src.main.routes.applications_routes import application_route_bp
 from src.main.routes.releases_routes import release_route_bp
+from src.main.routes.evidences_routes import evidence_route_bp
 
 db_connection_handler.connect_to_db()
 
@@ -19,3 +20,4 @@ def health():
 
 app.register_blueprint(application_route_bp)
 app.register_blueprint(release_route_bp)
+app.register_blueprint(evidence_route_bp)
