@@ -129,7 +129,7 @@ Overall Status: {'PASSED' if validation_passed else 'FAILED'}
 =================================================================
 """
 
-        with open(filepath, 'w') as f:
+        with open(filepath, 'w', encoding='utf-8') as f:
             f.write(evidence_content)
 
         evidence_url = f"/audit/evidences/{filename}"
