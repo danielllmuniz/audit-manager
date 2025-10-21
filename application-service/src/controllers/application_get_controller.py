@@ -19,13 +19,29 @@ class ApplicationGetController:
         return application
 
     def __format_response(self, application: ApplicationsTable) -> Dict:
+        releases_data = []
+        if application.releases:
+            for release in application.releases:
+                releases_data.append({
+                    "release_id": release.id,
+                    "application_id": release.application_id,
+                    "version": release.version,
+                    "env": release.env.value if release.env else None,
+                    "status": release.status.value if release.status else None,
+                    "evidence_url": release.evidence_url,
+                    "logs": release.deployment_logs,
+                    "created_at": release.created_at.isoformat() if release.created_at else None,
+                    "deployed_at": release.deployed_at.isoformat() if release.deployed_at else None
+                })
+
         response = {
             "data": {
                 "application_id": application.id,
                 "name": application.name,
                 "owner_team": application.owner_team,
                 "repo_url": application.repo_url,
-                "created_at": application.created_at.isoformat()
+                "created_at": application.created_at.isoformat(),
+                "releases": releases_data
             }
         }
         return response

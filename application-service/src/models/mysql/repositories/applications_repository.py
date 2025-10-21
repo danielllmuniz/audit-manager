@@ -2,6 +2,7 @@ from typing import List
 from src.models.mysql.entities.applications import ApplicationsTable
 from src.models.mysql.interfaces.application_repository import ApplicationRepositoryInterface
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm import joinedload
 
 
 class ApplicationsRepository(ApplicationRepositoryInterface):
@@ -30,9 +31,12 @@ class ApplicationsRepository(ApplicationRepositoryInterface):
                 application = (
                     database.session
                         .query(ApplicationsTable)
+                        .options(joinedload(ApplicationsTable.releases))
                         .filter(ApplicationsTable.id == application_id)
                         .one()
                 )
+                if application.releases:
+                    application.releases.sort(key=lambda r: r.created_at, reverse=True)
                 return application
             except NoResultFound:
                 return None

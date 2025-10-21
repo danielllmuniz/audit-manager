@@ -4,7 +4,6 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Application, Release } from '../../../core/models';
 import { Environment, ReleaseStatus } from '../../../core/models/enums';
 import { ApplicationService } from '../../../core/services/application.service';
-import { ReleaseService } from '../../../core/services/release.service';
 import { MaterialModule } from '../../../shared/material.module';
 import {
   getEnvironmentConfig,
@@ -22,7 +21,6 @@ export class ApplicationDetailComponent implements OnInit {
   application: Application | null = null;
   releases: Release[] = [];
   loading = false;
-  loadingReleases = false;
   displayedColumns: string[] = [
     'id',
     'version',
@@ -35,15 +33,13 @@ export class ApplicationDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private applicationService: ApplicationService,
-    private releaseService: ReleaseService
+    private applicationService: ApplicationService
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.loadApplication(+id);
-      this.loadReleases(+id);
     }
   }
 
@@ -52,26 +48,13 @@ export class ApplicationDetailComponent implements OnInit {
     this.applicationService.getApplicationById(id).subscribe({
       next: (data) => {
         this.application = data;
+        this.releases = data.releases || [];
         this.loading = false;
       },
       error: (error) => {
         console.error('Erro ao carregar application:', error);
         this.loading = false;
         this.router.navigate(['/applications']);
-      },
-    });
-  }
-
-  loadReleases(applicationId: number): void {
-    this.loadingReleases = true;
-    this.releaseService.getReleases({ applicationId }).subscribe({
-      next: (data) => {
-        this.releases = data;
-        this.loadingReleases = false;
-      },
-      error: (error) => {
-        console.error('Erro ao carregar releases:', error);
-        this.loadingReleases = false;
       },
     });
   }

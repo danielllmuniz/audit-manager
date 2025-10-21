@@ -77,6 +77,14 @@ export class ApplicationService {
       ownerTeam: app.owner_team,
       repoUrl: app.repo_url,
       createdAt: app.created_at ? new Date(app.created_at) : undefined,
+      releases: app.releases?.map(release => ({
+        ...release,
+        id: release.release_id,
+        applicationId: release.application_id,
+        evidenceUrl: release.evidence_url,
+        createdAt: release.created_at ? new Date(release.created_at) : undefined,
+        deployedAt: release.deployed_at ? new Date(release.deployed_at) : undefined,
+      }))
     };
   }
 }

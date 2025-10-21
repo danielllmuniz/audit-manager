@@ -67,8 +67,10 @@
       <mat-spinner diameter="20" class="button-spinner"></mat-spinner>
       <span>Criando...</span>
     } @else {
-      <mat-icon>rocket_launch</mat-icon>
-      <span>Criar Release</span>
+      <ng-container>
+        <mat-icon>rocket_launch</mat-icon>
+        <span>Criar Release</span>
+      </ng-container>
     }
   </button>
 </mat-dialog-actions>

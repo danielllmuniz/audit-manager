@@ -65,12 +65,7 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        @if (loadingReleases) {
-          <div class="loading-container">
-            <mat-spinner diameter="40"></mat-spinner>
-            <p>Carregando releases...</p>
-          </div>
-        } @else if (releases.length === 0) {
+        @if (releases.length === 0) {
           <div class="empty-state">
             <mat-icon class="empty-icon">rocket_launch</mat-icon>
             <h3>Nenhum release encontrado</h3>

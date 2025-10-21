@@ -96,7 +96,6 @@ mat-card-footer {
   }
 }
 
-// Responsivo
 @media (max-width: 600px) {
   .login-card {
     mat-card-header {

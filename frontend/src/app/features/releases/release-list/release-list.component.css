@@ -31,7 +31,6 @@
   }
 }
 
-// Filtros
 .filters-card {
   margin-bottom: 24px;
 
@@ -64,7 +63,6 @@
   }
 }
 
-// Tabela
 .table-card {
   mat-card-content {
     padding: 0;
@@ -150,7 +148,6 @@
   }
 }
 
-// Chips
 .version-chip {
   background-color: #e3f2fd !important;
   color: #1565c0 !important;
@@ -159,7 +156,6 @@
   height: 28px;
 }
 
-// Environment Chips
 .env-chip {
   display: flex;
   align-items: center;
@@ -190,7 +186,6 @@
   }
 }
 
-// Status Chips
 .status-chip {
   display: flex;
   align-items: center;
@@ -233,14 +228,12 @@
   }
 }
 
-// Action Buttons
 .action-buttons {
   display: flex;
   gap: 4px;
   align-items: center;
 }
 
-// Responsivo
 @media (max-width: 1200px) {
   .filters-form {
     grid-template-columns: repeat(2, 1fr);
