@@ -36,7 +36,8 @@ services:
       - DB_PORT=3306
       - DB_NAME=audit_db
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - audit-network
 
@@ -52,6 +53,12 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
     networks:
       - audit-network
 
