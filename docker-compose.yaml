@@ -1,5 +1,25 @@
 services:
-  web:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    environment:
+      - PORT=3000
+      - JWT_SECRET=fasdafsdafsd
+      - JWT_EXPIRES_IN=24h
+      - APPLICATION_SERVICE_URL=http://application-service:5000
+    depends_on:
+      - application-service
+    networks:
+      - audit-network
+
+  application-service:
     build:
       context: ./application-service
       dockerfile: Dockerfile
@@ -10,6 +30,15 @@ services:
       - ./application-service:/app
     environment:
       - FLASK_ENV=development
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=audit_db
+    depends_on:
+      - db
+    networks:
+      - audit-network
 
   db:
     image: mysql:8.0
@@ -23,6 +52,12 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - audit-network
 
 volumes:
   mysql_data:
+
+networks:
+  audit-network:
+    driver: bridge

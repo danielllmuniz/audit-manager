@@ -72,6 +72,8 @@
   background-color: white;
   margin-left: max(0px, calc((100vw - 1540px) / 2));
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+  overflow-x: hidden;
+
   mat-nav-list {
     padding-top: 16px;
 
@@ -89,6 +91,8 @@
       border-radius: 10px;
       transition: all 0.2s ease;
       color: var(--gray-700);
+      width: calc(100% - 16px);
+      max-width: calc(100% - 16px);
 
       &:hover {
         background-color: var(--gray-100);
