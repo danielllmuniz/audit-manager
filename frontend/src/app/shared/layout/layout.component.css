@@ -9,6 +9,17 @@
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  padding: 0;
+
+  .toolbar-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1540px;
+    padding: 0 16px;
+  }
 
   .menu-button {
     margin-right: 16px;
@@ -50,13 +61,15 @@
 
 .sidenav-container {
   flex: 1;
-  display: flex;
+  background-color: #f5f5f5;
 }
 
 .sidenav {
   width: 260px;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 0px;
+  background-color: white;
+  margin-left: max(0px, calc((100vw - 1540px) / 2));
   mat-nav-list {
     padding-top: 16px;
 
@@ -99,17 +112,31 @@
 }
 
 .main-content {
-  background-color: #f5f5f5;
+  flex: 1;
   overflow: auto;
 }
 
 .content-wrapper {
   padding: 24px;
-  width: 1200px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 1540px) {
+  .toolbar {
+    .toolbar-content {
+      max-width: 100%;
+    }
+  }
 }
 
 @media (max-width: 960px) {
   .toolbar {
+    .toolbar-content {
+      padding: 0 12px;
+    }
+
     .user-info {
       .user-name {
         display: none;
@@ -120,6 +147,10 @@
   .sidenav {
     width: 220px;
   }
+
+  .content-wrapper {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 600px) {
@@ -128,14 +159,25 @@
   }
 
   .toolbar {
+    .toolbar-content {
+      padding: 0 8px;
+    }
+
     .app-title {
       font-size: 16px;
     }
 
     .user-info {
+      gap: 4px;
+      margin-right: 8px;
+
       .role-chip {
         display: none;
       }
+    }
+
+    .menu-button {
+      margin-right: 8px;
     }
   }
 }
