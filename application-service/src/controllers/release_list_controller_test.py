@@ -16,7 +16,6 @@ class MockReleaseRepository:
 
 
 def test_list_all_releases():
-    """Test listing all releases"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_releases = [
