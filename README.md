@@ -44,7 +44,7 @@ Sistema de gerenciamento de releases com workflow de aprovação e auditoria com
 - Docker 20.10+
 - Docker Compose 2.0+
 - 4GB RAM disponível
-- Portas disponíveis: 3000, 4200, 5000, 3306, 5672, 15672
+- Portas disponíveis: 3000, 4200, 5000, 3306
 
 ### Instalação Rápida
 
@@ -70,6 +70,82 @@ Após a inicialização:
 | **API Gateway**         | http://localhost:3000 | JWT Token     |
 | **Application Service** | http://localhost:5000 | -             |
 | **MySQL**               | localhost:3306        | user/password |
+
+## Executar Sem Docker
+
+Se você não tiver Docker instalado, pode executar cada serviço manualmente:
+
+### 1. MySQL
+
+```bash
+# Instalar MySQL 8.0
+# Criar banco de dados
+mysql -u root -p
+CREATE DATABASE audit_db;
+CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON audit_db.* TO 'user'@'localhost';
+```
+
+### 2. Application Service (Backend)
+
+```bash
+cd application-service
+
+# Criar ambiente virtual
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# ou
+venv\Scripts\activate  # Windows
+
+# Instalar dependências
+pip install -r requirements.txt
+
+# Configurar variáveis de ambiente
+export DB_HOST=localhost
+export DB_PORT=3306
+export DB_USER=user
+export DB_PASSWORD=password
+export DB_NAME=audit_db
+export FLASK_ENV=development
+
+# Aplicar migrations
+alembic upgrade head
+
+# Iniciar servidor
+python run.py
+# Disponível em http://localhost:5000
+```
+
+### 3. API Gateway
+
+```bash
+cd api-gateway
+
+# Instalar dependências
+npm install
+
+# Configurar variáveis (.env)
+PORT=3000
+APPLICATION_SERVICE_URL=http://localhost:5000
+JWT_SECRET=fasdafsdafsd
+
+# Iniciar servidor
+npm start
+# Disponível em http://localhost:3000
+```
+
+### 4. Frontend
+
+```bash
+cd frontend
+
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm start
+# Disponível em http://localhost:4200
+```
 
 ## API Endpoints
 
