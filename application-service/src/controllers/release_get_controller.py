@@ -20,7 +20,6 @@ class ReleaseGetController:
         return release
 
     def __format_response(self, release: ReleasesTable) -> Dict:
-        # Format approvals
         approvals = []
         if release.approvals:
             approvals = [

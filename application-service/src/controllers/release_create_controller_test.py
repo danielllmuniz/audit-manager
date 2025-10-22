@@ -88,7 +88,7 @@ def test_create_release_validation_failed():
 
     assert "data" in response
     assert response["data"]["version"] == "1.0.0"
-    assert response["data"]["status"] == "REJECTED"  # Failed validation
+    assert response["data"]["status"] == "REJECTED"
     assert response["data"]["application_name"] == "TestApp"
 
 
@@ -107,7 +107,6 @@ def test_create_release_default_env():
         MockApplicationRepository(mock_app)
     )
 
-    # Mock the simulate_validation method
     with mock.patch.object(controller, '_ReleaseCreatorController__simulate_validation', return_value=(True, "/evidences/test.txt")):
         response = controller.create({
             "application_id": 1,
@@ -116,7 +115,7 @@ def test_create_release_default_env():
         })
 
     assert "data" in response
-    assert response["data"]["env"] == "DEV"  # Default environment
+    assert response["data"]["env"] == "DEV"
 
 
 def test_create_release_invalid_environment():
@@ -143,7 +142,6 @@ def test_create_release_invalid_environment():
 
 
 def test_create_release_application_not_found():
-    """Test creating a release for an application that doesn't exist"""
     controller = ReleaseCreatorController(
         MockReleaseRepository(),
         MockApplicationRepository(None)  # Application not found
@@ -158,7 +156,6 @@ def test_create_release_application_not_found():
 
 
 def test_create_release_with_preprod_env():
-    """Test creating a release with PREPROD environment"""
     mock_app = ApplicationsTable(
         id=1,
         name="TestApp",

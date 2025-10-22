@@ -43,7 +43,6 @@ class MockApprovalRepository:
 
 
 def test_disapprove_release_pending_preprod():
-    """Test disapproving a release with PENDING_PREPROD status"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -69,7 +68,6 @@ def test_disapprove_release_pending_preprod():
 
 
 def test_disapprove_release_pending_prod():
-    """Test disapproving a release with PENDING_PROD status"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -95,7 +93,6 @@ def test_disapprove_release_pending_prod():
 
 
 def test_disapprove_release_invalid_role():
-    """Test disapproving a release with invalid user role"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -119,7 +116,6 @@ def test_disapprove_release_invalid_role():
 
 
 def test_disapprove_release_invalid_status():
-    """Test disapproving a release with invalid status"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -143,7 +139,6 @@ def test_disapprove_release_invalid_status():
 
 
 def test_disapprove_release_not_found():
-    """Test disapproving a release that doesn't exist"""
     controller = ReleaseDisapproverController(
         MockReleaseRepository(None),
         MockApprovalRepository()

@@ -11,11 +11,9 @@ class ReleaseListerView(ViewInterface):
     def handle(self, http_request: HttpRequest) -> HttpResponse:
         list_role_validator(http_request)
 
-        # Extract query params
         query_params = http_request.query or {}
         application_id = query_params.get('applicationId')
 
-        # Convert to int if provided
         if application_id:
             try:
                 application_id = int(application_id)

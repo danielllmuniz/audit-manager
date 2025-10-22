@@ -124,12 +124,10 @@ class MockConnectionCommitError:
 def test_create_release():
     """Test creating a release with manual mock setup"""
 
-    # Create a manual mock for the session
     class MockCreateConnection:
         def __init__(self):
             self.session = mock.MagicMock()
 
-            # Create the release that will be returned
             release = ReleasesTable(
                 id=1,
                 application_id=1,
@@ -141,7 +139,6 @@ def test_create_release():
                 application=ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
             )
 
-            # Setup the mock chain for the second query (with joinedload)
             self.session.query.return_value.options.return_value.filter.return_value.one.return_value = release
 
         def __enter__(self):
@@ -161,13 +158,11 @@ def test_create_release():
         status=StatusEnum.CREATED
     )
 
-    # Verify session methods were called
     mock_connection.session.add.assert_called_once()
     mock_connection.session.commit.assert_called_once()
     mock_connection.session.refresh.assert_called_once()
     mock_connection.session.rollback.assert_not_called()
 
-    # Verify the release was returned
     assert release is not None
     assert release.version == "1.0.0"
 
@@ -189,7 +184,6 @@ def test_create_release_error():
 
 
 def test_get_release():
-    # Create mock with single release for .one() to work
     single_release = [
         ReleasesTable(
             id=1,
@@ -208,10 +202,8 @@ def test_get_release():
 
     release = repo.get_release(1)
 
-    # Verify query was made
     mock_connection.session.query.assert_called_with(ReleasesTable)
 
-    # Verify release was returned
     assert release is not None
     assert release.id == 1
     assert release.version == "1.0.0"
@@ -223,7 +215,6 @@ def test_get_release_not_found():
 
     release = repo.get_release(999)
 
-    # Should return None when not found
     assert release is None
     mock_connection.session.query.assert_called_once_with(ReleasesTable)
 
@@ -234,13 +225,11 @@ def test_list_releases():
 
     releases = repo.list_releases()
 
-    # Verify query was made
     mock_connection.session.query.assert_called_with(ReleasesTable)
     mock_connection.session.query().options.assert_called_once()
     mock_connection.session.query().options().order_by.assert_called_once()
     mock_connection.session.query().options().order_by().all.assert_called_once()
 
-    # Verify releases were returned
     assert len(releases) == 3
     assert releases[0].version == "1.0.0"
 
@@ -251,13 +240,11 @@ def test_list_releases_no_results():
 
     releases = repo.list_releases()
 
-    # Should return empty list when no results
     assert releases == []
     mock_connection.session.query.assert_called_once_with(ReleasesTable)
 
 
 def test_list_releases_by_application():
-    # Create mock with only releases for application_id=1
     app1_releases = [
         ReleasesTable(
             id=1,
@@ -286,12 +273,10 @@ def test_list_releases_by_application():
 
     releases = repo.list_releases_by_application(1)
 
-    # Verify query was made with filter
     mock_connection.session.query.assert_called_with(ReleasesTable)
     mock_connection.session.query().options.assert_called_once()
     mock_connection.session.query().options().filter.assert_called_once()
 
-    # Verify releases were returned
     assert len(releases) == 2
     assert all(r.application_id == 1 for r in releases)
 
@@ -302,13 +287,11 @@ def test_list_releases_by_application_no_results():
 
     releases = repo.list_releases_by_application(999)
 
-    # Should return empty list when no results
     assert releases == []
     mock_connection.session.query.assert_called_once_with(ReleasesTable)
 
 
 def test_update_release():
-    # Create mock with single release for .one() to work
     single_release = [
         ReleasesTable(
             id=1,
@@ -332,11 +315,9 @@ def test_update_release():
 
     release = repo.update_release(1, update_data)
 
-    # Verify commit was called
     mock_connection.session.commit.assert_called_once()
     mock_connection.session.rollback.assert_not_called()
 
-    # Verify query was made
     assert mock_connection.session.query.call_count >= 2  # one for update, one for reload
 
     assert release is not None
@@ -349,7 +330,6 @@ def test_update_release_not_found():
     update_data = {"status": StatusEnum.APPROVED_PREPROD}
     release = repo.update_release(999, update_data)
 
-    # Should return None when not found
     assert release is None
     mock_connection.session.query.assert_called_with(ReleasesTable)
 

@@ -47,10 +47,6 @@ class ReleasePromoterController:
             )
 
     def __fake_deployment(self, release: ReleasesTable) -> Tuple[bool, str]:
-        """
-        Simula um deployment automatizado.
-        Retorna: (sucesso: bool, logs: str)
-        """
         success = random.random() < 0.9
 
         target_env = self.__determine_target_environment(release.env)
@@ -77,11 +73,6 @@ class ReleasePromoterController:
         return success, logs
 
     def __determine_target_environment(self, current_env: EnvironmentEnum) -> EnvironmentEnum:
-        """
-        Determina o ambiente alvo baseado no ambiente atual.
-        DEV -> PREPROD
-        PREPROD -> PROD
-        """
         env_mapping = {
             EnvironmentEnum.DEV: EnvironmentEnum.PREPROD,
             EnvironmentEnum.PREPROD: EnvironmentEnum.PROD
@@ -89,9 +80,6 @@ class ReleasePromoterController:
         return env_mapping.get(current_env, current_env)
 
     def __determine_new_status(self, current_status: StatusEnum, deployment_success: bool) -> StatusEnum:
-        """
-        Determina o novo status baseado no status atual e resultado do deployment.
-        """
         if not deployment_success:
             return StatusEnum.REJECTED
 
@@ -109,9 +97,6 @@ class ReleasePromoterController:
         deployment_success: bool,
         deployment_logs: str
     ) -> ReleasesTable:
-        """
-        Atualiza a release após o deployment.
-        """
         update_data = {
             "deployment_logs": deployment_logs,
             "status": self.__determine_new_status(release.status, deployment_success)

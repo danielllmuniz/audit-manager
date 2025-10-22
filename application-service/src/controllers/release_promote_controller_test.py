@@ -27,7 +27,6 @@ class MockReleaseRepository:
 
 
 def test_promote_release_approved_preprod():
-    """Test promoting a release with APPROVED_PREPROD status"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -45,18 +44,15 @@ def test_promote_release_approved_preprod():
 
     controller = ReleasePromoterController(MockReleaseRepository(mock_release))
 
-    # Mock the fake_deployment method to always return success
     with mock.patch.object(controller, '_ReleasePromoterController__fake_deployment', return_value=(True, "Deployment successful")):
         response = controller.promote(release_id=1, user_role="DEVOPS")
 
     assert "data" in response
-    # Should be promoted to PREPROD with PENDING_PROD status after successful deployment
     assert response["data"]["status"] == "PENDING_PROD"
     assert response["data"]["env"] == "PREPROD"
 
 
 def test_promote_release_approved_prod():
-    """Test promoting a release with APPROVED_PROD status"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -74,18 +70,15 @@ def test_promote_release_approved_prod():
 
     controller = ReleasePromoterController(MockReleaseRepository(mock_release))
 
-    # Mock the fake_deployment method to always return success
     with mock.patch.object(controller, '_ReleasePromoterController__fake_deployment', return_value=(True, "Deployment successful")):
         response = controller.promote(release_id=1, user_role="DEVOPS")
 
     assert "data" in response
-    # Should be promoted to PROD with DEPLOYED status after successful deployment
     assert response["data"]["status"] == "DEPLOYED"
     assert response["data"]["env"] == "PROD"
 
 
 def test_promote_release_deployment_failure():
-    """Test promoting a release when deployment fails"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -103,17 +96,14 @@ def test_promote_release_deployment_failure():
 
     controller = ReleasePromoterController(MockReleaseRepository(mock_release))
 
-    # Mock the fake_deployment method to always return failure
     with mock.patch.object(controller, '_ReleasePromoterController__fake_deployment', return_value=(False, "Deployment failed")):
         response = controller.promote(release_id=1, user_role="DEVOPS")
 
     assert "data" in response
-    # Should be marked as REJECTED after failed deployment
     assert response["data"]["status"] == "REJECTED"
 
 
 def test_promote_release_invalid_role():
-    """Test promoting a release with invalid user role"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -134,7 +124,6 @@ def test_promote_release_invalid_role():
 
 
 def test_promote_release_invalid_status():
-    """Test promoting a release with invalid status"""
     mock_app = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
 
     mock_release = ReleasesTable(
@@ -155,7 +144,6 @@ def test_promote_release_invalid_status():
 
 
 def test_promote_release_not_found():
-    """Test promoting a release that doesn't exist"""
     controller = ReleasePromoterController(MockReleaseRepository(None))
 
     with pytest.raises(HttpNotFoundError):

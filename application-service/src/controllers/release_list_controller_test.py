@@ -53,7 +53,6 @@ def test_list_all_releases():
 
 
 def test_list_releases_by_application():
-    """Test listing releases filtered by application"""
     mock_app1 = ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
     mock_app2 = ApplicationsTable(id=2, name="App2", owner_team="TeamB", repo_url="http://repo2")
 
@@ -90,7 +89,6 @@ def test_list_releases_by_application():
 
 
 def test_list_releases_empty():
-    """Test listing releases when there are none"""
     controller = ReleaseListerController(MockReleaseRepository([]))
     response = controller.list()
 
