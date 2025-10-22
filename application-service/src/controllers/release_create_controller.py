@@ -9,6 +9,7 @@ from src.models.mysql.entities.releases import ReleasesTable, EnvironmentEnum, S
 from src.errors.error_types.http_not_found import HttpNotFoundError
 from src.errors.error_types.http_unprocessable_entity import HttpUnprocessableEntityError
 
+VALIDATION_RATE = 0.5
 class ReleaseCreatorController:
     def __init__(
         self,
@@ -52,7 +53,7 @@ class ReleaseCreatorController:
             raise HttpUnprocessableEntityError(f"Invalid environment '{env}'. Valid options: {valid_envs}")
 
     def __simulate_validation(self, version: str) -> Tuple[bool, str]:
-        validation_passed = random.random() < 0.8
+        validation_passed = random.random() < VALIDATION_RATE
         evidence_id = str(uuid.uuid4())
         now = datetime.now(timezone.utc)
         timestamp = now.isoformat()
