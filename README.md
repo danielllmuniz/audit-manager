@@ -64,33 +64,22 @@ O script irá:
 
 Após a inicialização:
 
-| Serviço                 | URL                    | Credenciais   |
-| ----------------------- | ---------------------- | ------------- |
-| **Frontend**            | http://localhost:4200  | -             |
-| **API Gateway**         | http://localhost:3000  | JWT Token     |
-| **Application Service** | http://localhost:5000  | JWT Token     |
-| **MySQL**               | localhost:3306         | user/password |
-| **RabbitMQ Management** | http://localhost:15672 | guest/guest   |
-
-## Workflow de Release
-
-### Diagrama de Estados
-
-```
-CREATED → PENDING_PREPROD → APPROVED_PREPROD → PENDING_PROD → APPROVED_PROD → DEPLOYED
-            ↓                      ↓                  ↓              ↓
-         REJECTED             REJECTED           REJECTED       REJECTED
-```
+| Serviço                 | URL                   | Credenciais   |
+| ----------------------- | --------------------- | ------------- |
+| **Frontend**            | http://localhost:4200 | -             |
+| **API Gateway**         | http://localhost:3000 | JWT Token     |
+| **Application Service** | http://localhost:5000 | -             |
+| **MySQL**               | localhost:3306        | user/password |
 
 ## API Endpoints
 
 ### Applications
 
-| Método | Endpoint                  | Descrição         | Autenticação |
-| ------ | ------------------------- | ----------------- | ------------ |
-| GET    | `/audit/applications`     | Listar aplicações | JWT          |
-| POST   | `/audit/applications`     | Criar aplicação   | JWT          |
-| GET    | `/audit/applications/:id` | Buscar aplicação  | JWT          |
+| Método | Endpoint                  | Descrição         | Autenticação | Role Necessária |
+| ------ | ------------------------- | ----------------- | ------------ | --------------- |
+| GET    | `/audit/applications`     | Listar aplicações | JWT          | -               |
+| POST   | `/audit/applications`     | Criar aplicação   | JWT          | DEVELOPER       |
+| GET    | `/audit/applications/:id` | Buscar aplicação  | JWT          | -               |
 
 ### Releases
 
@@ -146,21 +135,7 @@ Routes → Views → Controllers → Repositories → Models
 - Facilita manutenção e evolução
 - Código mais testável
 
-### 4. RabbitMQ para Notificações
-
-**Por quê?**
-
-- Desacoplamento entre serviços
-- Resiliência (retry automático)
-- Escalabilidade horizontal
-- Padrão Producer/Consumer
-
-**Alternativas consideradas:**
-
-- Envio direto de email (acoplamento forte)
-- Webhook (sem garantia de entrega)
-
-### 5. Docker Compose para Orquestração
+### 4. Docker Compose para Orquestração
 
 **Por quê?**
 
@@ -218,11 +193,13 @@ def __fake_deployment(self, release: ReleasesTable) -> Tuple[bool, str]:
 - Simplicidade na demonstração
 - Foco no workflow de negócio
 - Fácil testar diferentes roles
+- Util quando usado para servico sem acesso ao mundo externo
 
 **Contras:**
 
 - Não é seguro para produção
 - Falta validação real do token
+- Deve-se confiar totalmente no gateway
 
 ### 2. SQLite para Testes de Integração
 
