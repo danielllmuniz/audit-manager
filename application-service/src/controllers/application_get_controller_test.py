@@ -10,7 +10,8 @@ class MockApplicationRepository:
     def __init__(self, application=None):
         self.application = application
 
-    def get_application(self):
+    def get_application(self, application_id: int = None):
+        _ = application_id
         return self.application
 
 

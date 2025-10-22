@@ -3,11 +3,12 @@ from src.models.mysql.entities.applications import ApplicationsTable
 from .application_create_controller import ApplicationCreatorController
 
 class MockApplicationRepository:
-    def insert_application(self):
-        pass
+    def insert_application(self, name: str = None, owner_team: str = None, repo_url: str = None):
+        _ = name, owner_team, repo_url
 
-    def get_application_by_name(self):
-        return None
+    def get_application_by_name(self, name: str = None):
+        _ = name
+
 
     def create_application(self, name: str, owner_team: str, repo_url: str):
         app = ApplicationsTable(

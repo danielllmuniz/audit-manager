@@ -14,10 +14,12 @@ class MockReleaseRepository:
         self.release = release
         self.updated_release = updated_release or release
 
-    def get_release(self):
+    def get_release(self, release_id: int = None):
+        _ = release_id
         return self.release
 
-    def update_release(self, update_data: dict = None):
+    def update_release(self, release_id: int = None, update_data: dict = None):
+        _ = release_id
         if self.updated_release and update_data:
             for key, value in update_data.items():
                 setattr(self.updated_release, key, value)
