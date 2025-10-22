@@ -31,8 +31,11 @@ services:
       - JWT_SECRET=fasdafsdafsd
       - JWT_EXPIRES_IN=24h
       - APPLICATION_SERVICE_URL=http://application-service:5000
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
       - application-service
+      - rabbitmq
     networks:
       - audit-network
 
@@ -53,8 +56,12 @@ services:
       - DB_HOST=db
       - DB_PORT=3306
       - DB_NAME=audit_db
+      - RABBITMQ_HOST=rabbitmq
+      - RABBITMQ_PORT=5672
     depends_on:
       db:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
     networks:
       - audit-network
@@ -72,7 +79,17 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "user", "-ppassword"]
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "user",
+          "-ppassword",
+        ]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -80,9 +97,29 @@ services:
     networks:
       - audit-network
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - audit-network
+
 volumes:
   mysql_data:
   uploads_data:
+  rabbitmq_data:
 
 networks:
   audit-network:
