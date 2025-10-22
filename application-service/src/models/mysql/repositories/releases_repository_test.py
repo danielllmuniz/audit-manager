@@ -88,31 +88,88 @@ class MockConnectionError:
         pass
 
 
-def test_create_release():
-    # Create mock with single release for .one() to work
-    single_release = [
-        ReleasesTable(
-            id=1,
-            application_id=1,
-            version="1.0.0",
-            env=EnvironmentEnum.DEV,
-            status=StatusEnum.CREATED,
-            evidence_url="/evidences/test.txt",
-            created_at=datetime.now(timezone.utc),
-            application=ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
-        )
-    ]
+class MockConnectionCommitError:
+    """Mock that allows queries to work but fails on commit"""
+    def __init__(self) -> None:
+        single_release = [
+            ReleasesTable(
+                id=1,
+                application_id=1,
+                version="1.0.0",
+                env=EnvironmentEnum.DEV,
+                status=StatusEnum.CREATED,
+                evidence_url="/evidences/test.txt",
+                created_at=datetime.now(timezone.utc),
+                application=ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
+            )
+        ]
 
-    mock_connection = MockConnection(release_data=single_release)
+        self.session = UnifiedAlchemyMagicMock(
+            data=[
+                (
+                    [mock.call.query(ReleasesTable)],
+                    single_release,
+                )
+            ]
+        )
+        self.session.commit.side_effect = Exception("Database commit error")
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
+
+
+def test_create_release():
+    """Test creating a release with manual mock setup"""
+
+    # Create a manual mock for the session
+    class MockCreateConnection:
+        def __init__(self):
+            self.session = mock.MagicMock()
+
+            # Create the release that will be returned
+            release = ReleasesTable(
+                id=1,
+                application_id=1,
+                version="1.0.0",
+                env=EnvironmentEnum.DEV,
+                status=StatusEnum.CREATED,
+                evidence_url="/evidences/test.txt",
+                created_at=datetime.now(timezone.utc),
+                application=ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
+            )
+
+            # Setup the mock chain for the second query (with joinedload)
+            self.session.query.return_value.options.return_value.filter.return_value.one.return_value = release
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            pass
+
+    mock_connection = MockCreateConnection()
+    repo = ReleasesRepository(mock_connection)
+
+    release = repo.create_release(
+        application_id=1,
+        version="1.0.0",
+        env=EnvironmentEnum.DEV,
+        evidence_url="/evidences/test.txt",
+        status=StatusEnum.CREATED
+    )
 
     # Verify session methods were called
     mock_connection.session.add.assert_called_once()
-    mock_connection.session.commit.assert_called()
+    mock_connection.session.commit.assert_called_once()
     mock_connection.session.refresh.assert_called_once()
     mock_connection.session.rollback.assert_not_called()
 
-    # Verify the query for joined data
-    assert mock_connection.session.query.call_count >= 1
+    # Verify the release was returned
+    assert release is not None
+    assert release.version == "1.0.0"
 
 
 def test_create_release_error():
@@ -251,7 +308,21 @@ def test_list_releases_by_application_no_results():
 
 
 def test_update_release():
-    mock_connection = MockConnection()
+    # Create mock with single release for .one() to work
+    single_release = [
+        ReleasesTable(
+            id=1,
+            application_id=1,
+            version="1.0.0",
+            env=EnvironmentEnum.DEV,
+            status=StatusEnum.CREATED,
+            evidence_url="/evidences/test.txt",
+            created_at=datetime.now(timezone.utc),
+            application=ApplicationsTable(id=1, name="App1", owner_team="TeamA", repo_url="http://repo1")
+        )
+    ]
+
+    mock_connection = MockConnection(release_data=single_release)
     repo = ReleasesRepository(mock_connection)
 
     update_data = {
@@ -284,7 +355,7 @@ def test_update_release_not_found():
 
 
 def test_update_release_error():
-    mock_connection = MockConnectionError()
+    mock_connection = MockConnectionCommitError()
     repo = ReleasesRepository(mock_connection)
 
     update_data = {"status": StatusEnum.APPROVED_PREPROD}

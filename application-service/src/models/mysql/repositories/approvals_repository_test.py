@@ -92,13 +92,11 @@ def test_create_approval():
         notes="Test approval"
     )
 
-    # Verify session methods were called
     mock_connection.session.add.assert_called_once()
     mock_connection.session.commit.assert_called_once()
     mock_connection.session.refresh.assert_called_once()
     mock_connection.session.rollback.assert_not_called()
 
-    # Verify approval was returned
     assert approval is not None
 
 
@@ -113,7 +111,6 @@ def test_create_approval_without_notes():
         notes=None
     )
 
-    # Verify session methods were called
     mock_connection.session.add.assert_called_once()
     mock_connection.session.commit.assert_called_once()
     mock_connection.session.refresh.assert_called_once()
@@ -138,17 +135,26 @@ def test_create_approval_error():
 
 
 def test_get_approval():
-    mock_connection = MockConnection()
+    single_approval = [
+        ApprovalsTable(
+            id=1,
+            release_id=1,
+            approver_email="approver1@example.com",
+            outcome=OutcomeEnum.APPROVED,
+            notes="Looks good",
+            timestamp=datetime.now(timezone.utc)
+        )
+    ]
+
+    mock_connection = MockConnection(approval_data=single_approval)
     repo = ApprovalsRepository(mock_connection)
 
     approval = repo.get_approval(1)
 
-    # Verify query was made
     mock_connection.session.query.assert_called_with(ApprovalsTable)
     mock_connection.session.query().filter.assert_called_once()
     mock_connection.session.query().filter().one.assert_called_once()
 
-    # Verify approval was returned
     assert approval is not None
     assert approval.id == 1
     assert approval.approver_email == "approver1@example.com"
@@ -160,13 +166,11 @@ def test_get_approval_not_found():
 
     approval = repo.get_approval(999)
 
-    # Should return None when not found
     assert approval is None
     mock_connection.session.query.assert_called_once_with(ApprovalsTable)
 
 
 def test_list_approvals_by_release():
-    # Create mock with only approvals for release_id=1
     release1_approvals = [
         ApprovalsTable(
             id=1,
@@ -191,12 +195,10 @@ def test_list_approvals_by_release():
 
     approvals = repo.list_approvals_by_release(1)
 
-    # Verify query was made with filter
     mock_connection.session.query.assert_called_with(ApprovalsTable)
     mock_connection.session.query().filter.assert_called_once()
     mock_connection.session.query().filter().all.assert_called_once()
 
-    # Verify approvals were returned
     assert len(approvals) == 2
     assert all(a.release_id == 1 for a in approvals)
 
@@ -207,7 +209,6 @@ def test_list_approvals_by_release_no_results():
 
     approvals = repo.list_approvals_by_release(999)
 
-    # Should return empty list when no results
     assert approvals == []
     mock_connection.session.query.assert_called_once_with(ApprovalsTable)
 
@@ -238,7 +239,6 @@ def test_list_approvals_by_release_with_rejected():
 
     approvals = repo.list_approvals_by_release(2)
 
-    # Verify both approvals were returned
     assert len(approvals) == 2
     assert approvals[0].outcome == OutcomeEnum.APPROVED
     assert approvals[1].outcome == OutcomeEnum.REJECTED
