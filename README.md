@@ -64,12 +64,13 @@ O script irá:
 
 Após a inicialização:
 
-| Serviço                 | URL                   | Credenciais   |
-| ----------------------- | --------------------- | ------------- |
-| **Frontend**            | http://localhost:4200 | -             |
-| **API Gateway**         | http://localhost:3000 | JWT Token     |
-| **Application Service** | http://localhost:5000 | -             |
-| **MySQL**               | localhost:3306        | user/password |
+| Serviço                 | URL                            | Credenciais   |
+| ----------------------- | ------------------------------ | ------------- |
+| **Frontend**            | http://localhost:4200          | -             |
+| **API Gateway**         | http://localhost:3000          | JWT Token     |
+| **Application Service** | http://localhost:5000          | -             |
+| **Swagger UI**          | http://localhost:5000/apidocs/ | -             |
+| **MySQL**               | localhost:3306                 | user/password |
 
 ## Executar Sem Docker
 
@@ -146,6 +147,12 @@ npm install
 npm start
 # Disponível em http://localhost:4200
 ```
+
+## Documentação da API (Swagger)
+
+A API possui documentação interativa completa através do Swagger UI:
+
+- **URL**: http://localhost:5000/apidocs/
 
 ## API Endpoints
 
