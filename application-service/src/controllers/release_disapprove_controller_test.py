@@ -17,9 +17,8 @@ class MockReleaseRepository:
     def get_release(self):
         return self.release
 
-    def update_release(self, release_id: int, update_data: dict):
-        _ = release_id
-        if self.updated_release:
+    def update_release(self, update_data: dict = None):
+        if self.updated_release and update_data:
             for key, value in update_data.items():
                 setattr(self.updated_release, key, value)
         return self.updated_release

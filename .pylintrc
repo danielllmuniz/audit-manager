@@ -18,6 +18,7 @@ disable=
       R1705,  # no-else-return
       R0801,  # Similar lines in 2 files
       W1514,  # unspecified-encoding
+      W0621,  #redefined-outer-name
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
 # only in one or another interpreter, leading to false positives when analysed.
